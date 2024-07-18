@@ -1,17 +1,15 @@
-import React, { useRef } from 'react';
-import CustomCheckBoxButton from '../components/custom-checkbox-button';
+import { useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Webcam from 'react-webcam';
-import { useDispatch } from 'react-redux';
-import { resizeBase64Image } from '../../helper';
-import { scannerActions } from '../../state/reducers/scanner-reducer';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../state/store';
 import {
   useSetBusy,
   useSetToasterMessage,
 } from '../../custom-hooks/authorize-provider';
+import { resizeBase64Image } from '../../helper';
 import { saveAttendance } from '../../repositories/event-attendance-queries';
 import { saveClaim } from '../../repositories/event-claim-queries';
+import { scannerActions } from '../../state/reducers/scanner-reducer';
+import { RootState } from '../../state/store';
 
 export default function CapturePhoto() {
   const scannerState = useSelector((state: RootState) => state.scanner);
@@ -38,11 +36,14 @@ export default function CapturePhoto() {
         scannerState.person?.id ?? 0,
         userProfileState.event?.id ?? 0,
         scannerState.photo ?? '',
-        scannerState.approvedId
+        scannerState.approvedId,
+        scannerState.hasRepresentative
+          ? scannerState.representative?.id
+          : undefined
       )
         .then((res) => {
           if (res) {
-            dispatch(scannerActions.setScreen(5));
+            dispatch(scannerActions.setScreen(7));
           } else {
             setToasterMessage({ content: 'Unable to save attendance' });
           }
@@ -56,11 +57,14 @@ export default function CapturePhoto() {
         scannerState.person?.id ?? 0,
         userProfileState.event?.id ?? 0,
         scannerState.photo ?? '',
-        scannerState.approvedId
+        scannerState.approvedId,
+        scannerState.hasRepresentative
+          ? scannerState.representative?.id
+          : undefined
       )
         .then((res) => {
           if (res) {
-            dispatch(scannerActions.setScreen(5));
+            dispatch(scannerActions.setScreen(7));
           } else {
             setToasterMessage({ content: 'Unable to save claim' });
           }
@@ -92,7 +96,7 @@ export default function CapturePhoto() {
       </div>
       {scannerState.photo ? (
         <>
-          <button className='btn color-red' onClick={reCapture}>
+          <button className='btn color-blue' onClick={reCapture}>
             Recapture
           </button>
           <button className='btn color-green' onClick={confirm}>

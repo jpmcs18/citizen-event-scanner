@@ -1,6 +1,6 @@
 export const SecurityEnd = {
   Refresh: 'securities/token/refresh',
-  Login: 'securities/log',
+  Login: 'securities/scanner/log',
 };
 export const EventAttendanceEnd = {
   Save: 'event-attendances',

@@ -24,7 +24,9 @@ export default function Approval() {
     )
       .then((res) => {
         if (!!res) {
-          dispatch(scannerActions.setScreen(4));
+          if (scannerState.hasRepresentative)
+            dispatch(scannerActions.setScreen(4));
+          else dispatch(scannerActions.setScreen(6));
           dispatch(scannerActions.setApproverPasscode(undefined));
           dispatch(scannerActions.setApproverId(res));
         } else {

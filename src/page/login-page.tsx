@@ -11,7 +11,6 @@ import { loginActions } from '../state/reducers/login-reducer';
 import { userProfileActions } from '../state/reducers/user-profile-reducer';
 import { RootState } from '../state/store';
 import CustomPassword from './components/custom-password';
-import CustomTextBox from './components/custom-textbox';
 import CustomUsername from './components/custom-username';
 
 export default function LoginPage() {

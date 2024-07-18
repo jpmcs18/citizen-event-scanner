@@ -38,13 +38,7 @@ export default function HomePage() {
             <div className='main-logo'>
               <img src={logo} alt='Main' />
             </div>
-            <div className='main-logo-text'>
-              <span className='text1'>CITIZEN</span>
-              <span className='text2'>EVENT SCANNER</span>
-              <span className='text3'>
-                Iangat ang antas ng Buhay ng Navoteño!
-              </span>
-            </div>
+            <div className='main-logo-text'>Event Scanner</div>
           </div>
           {userProfileState.event && (
             <button

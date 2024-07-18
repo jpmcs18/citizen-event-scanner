@@ -66,7 +66,8 @@
   --green-color: #19af02;
   --green-color-accent: white;
   --label-size: 0.7rem;
-  --normal-font-size: 1rem;
+  --normal-font-size: 1.5rem;
+  --input-font-size: 1rem;
   --message-font-size: 1.4rem;
   --banner-font-size: 1rem;
   --menu-header-font-size: 1.1rem;
@@ -79,12 +80,12 @@
   --requisition-box-font-size: 1.1rem;
   --display-font-size: 1rem;
   --otp-font-size: 2rem;
-  --title-font-size: 1.3rem;
+  --title-font-size: 1rem;
   --subtitle-font-size: 0.9rem;
   --logo-text1-font-size: 1.5rem;
   --logo-text2-font-size: 2.2rem;
   --logo-text3-font-size: 0.6rem;
-  --button-font-size: 1.8rem;
+  --button-font-size: 1.3rem;
   --normal: 300;
   --light: 400;
   --regular: 500;
@@ -155,13 +156,14 @@
   height: 100vh;
 }
 .body-content {
-  height: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-direction: column;
+  overflow: auto;
+
   .main-display-text {
-    margin: 3em 1em 2em 1em;
-    font-size: 2.5rem;
+    margin: 1.5em 1em;
     font-weight: var(--demibold);
     text-align: center;
     .icon-logo {
@@ -175,8 +177,12 @@
     font-size: 1.8rem;
     text-align: center;
   }
+  .displayed-text {
+    font-size: 1.4rem;
+    margin: 1em 5em;
+    text-align: center;
+  }
   .name {
-    font-size: 2rem;
     font-weight: var(--demibold);
     margin: 0.5em;
     text-align: center;
@@ -185,14 +191,14 @@
     box-shadow: 0em 0em 0.5em var(--shadow-color);
     border: 0.01em solid black;
     margin: 1em;
-    width: calc(100% - 2em);
-    height: calc(100vw - 2em);
+    width: calc(100vw - 5em);
+    aspect-ratio: 1;
   }
   .not-in-list {
     font-weight: var(--demibold);
     color: var(--red-color);
     font-size: var(--title-font-size);
-    margin: 0;
+    text-align: center;
   }
   .webcam {
     box-shadow: 0em 0em 0.5em var(--shadow-color);
@@ -209,29 +215,13 @@
   align-items: center;
   .main-logo {
     img {
-      height: 6em;
+      height: 2.5em;
     }
   }
   .main-logo-text {
+    margin-top: -1em;
     margin-left: 0.5em;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    .text1 {
-      font-size: 1.6rem;
-      font-weight: var(--demibold);
-    }
-    .text2 {
-      margin-top: -0.5em;
-      margin-bottom: -0.2em;
-      font-size: 1.8rem;
-      font-weight: var(--bold);
-      color: var(--primary-color);
-    }
-    .text3 {
-      font-size: 0.8rem;
-      color: gray;
-    }
+    font-weight: var(--demibold);
   }
 }
 body {
@@ -240,6 +230,7 @@ body {
   background: var(--main-background-color);
   color: var(--color);
   overflow-x: hidden;
+  font-size: var(--normal-font-size);
 }
 
 .bold-style {
@@ -304,7 +295,6 @@ section {
   }
   .login-side {
     width: 100%;
-    margin-top: -3em;
     .header {
       display: flex;
       flex-direction: column;
@@ -432,8 +422,8 @@ section {
   padding: 0.7em 2em;
   cursor: pointer;
   color: var(--primary-color-accent);
-  font-size: var(--button-font-size);
   font-weight: var(--demibold);
+  font-size: var(--button-font-size);
   border: none;
   width: 80vw;
   background: var(--primary-color);
@@ -468,7 +458,7 @@ input {
   border: 0.01em solid var(--input-border-color);
   color: var(--color);
   border-radius: 0.3em;
-  font-size: var(--normal-font-size) !important;
+  font-size: var(--input-font-size) !important;
   padding: 0.5em;
   width: 100%;
   box-sizing: border-box;
@@ -530,9 +520,8 @@ input {
   }
 }
 .custom-input {
-  width: calc(100% - 2em);
+  width: 100%;
   padding: 0.3em;
-  margin: 1em;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -634,6 +623,7 @@ input {
       align-self: center;
       .icon {
         cursor: pointer;
+        font-size: var(--input-font-size);
         color: var(--color);
       }
     }
@@ -1368,6 +1358,9 @@ fieldset {
   background-color: var(--red-color) !important;
   color: var(--red-color-accent) !important;
 }
+.color-blue {
+  background-color: var(--blue-color) !important;
+}
 .text-red {
   color: var(--red-color) !important;
 }
@@ -1392,7 +1385,6 @@ fieldset {
 .btn-home,
 .btn-logout {
   svg {
-    filter: drop-shadow(0em 0em 0.3em var(--primary-color));
     height: 3em;
     width: 3em;
   }
@@ -1416,6 +1408,7 @@ fieldset {
   .qrcode-reader-modal {
     width: 100vw;
     .qrcode-reader-sub-title {
+      font-size: 1.2rem;
       text-align: center;
       font-weight: var(--demibold);
     }
@@ -1731,7 +1724,7 @@ fieldset {
     cursor: pointer;
     background-color: var(--toaster-background-color);
     box-shadow: 0em 0em 0.2em 0em var(--shadow-color);
-    width: 20em;
+    width: 90vw;
     min-height: 7em;
     margin: 0.2em;
     border-radius: 0.3em;

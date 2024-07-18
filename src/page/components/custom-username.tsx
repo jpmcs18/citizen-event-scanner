@@ -28,17 +28,6 @@ export default function CustomUsername({
   onKeyPress?: (key: React.KeyboardEvent<HTMLDivElement>) => void;
   required?: boolean;
 }) {
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const allowedCharactersRegex = /^[a-zA-Z0-9_@\.]+$/; // Regular expression to allow only alphanumeric characters, underscores, and hyphens
-    const keyPressed = event.key;
-
-    // Check if the pressed key is not allowed
-    if (!allowedCharactersRegex.test(keyPressed)) {
-      event.preventDefault(); // Prevent the default action (typing the character)
-    }
-
-    onKeyPress?.(event);
-  };
   return (
     <div className={'custom-input ' + (required && !value && 'required ')}>
       {title && (
@@ -60,10 +49,14 @@ export default function CustomUsername({
         name={name}
         id={id}
         value={value ?? ''}
-        onChange={(e) =>
-          onChange?.({ elementName: name ?? '', value: e.target.value })
-        }
-        onKeyDown={handleKeyDown}
+        onChange={(e) => {
+          // alert(e.target.value.replaceAll(/^[^a-zA-Z0-9_@.-]+$/g, ''));
+          onChange?.({
+            elementName: name ?? '',
+            value: e.target.value.replaceAll(/[^\d\w_@.-]/g, ''),
+          });
+        }}
+        onKeyDown={onKeyPress}
       />
     </div>
   );
