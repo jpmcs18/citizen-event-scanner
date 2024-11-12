@@ -11,3 +11,5 @@ export const Pages = {
   Dashboard: 'Dashboard',
   Persons: 'Persons',
 };
+
+export const events: any[] = ['Event', 'Verification', 'Attendance'];

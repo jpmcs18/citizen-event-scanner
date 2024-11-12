@@ -1,22 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import Event from '../../models/entities/Event';
+import Person from '../../models/entities/Person';
 import SystemUser from '../../models/entities/SystemUser';
 import TokenData from '../../models/entities/TokenData';
 import {
   clearSession,
   clearSessionEvent,
+  getScanner,
   getSessionEvent,
   getSessionProfile,
   getToken,
+  saveScanner,
   saveSessionEvent,
   saveSessionProfile,
 } from '../../repositories/session-managers';
-import Event from '../../models/entities/Event';
 
 interface State {
   authorize: boolean | undefined;
   systemUser: SystemUser | undefined;
   token: TokenData | undefined;
   event: Event | undefined;
+  person: Person | undefined;
+  screen: number;
+  isScanner: boolean;
+  eventId: number;
 }
 
 const initialState: State = {
@@ -24,6 +31,10 @@ const initialState: State = {
   systemUser: undefined,
   token: undefined,
   event: undefined,
+  person: undefined,
+  screen: 1,
+  isScanner: false,
+  eventId: 0,
 };
 
 const userProfileSlice = createSlice({
@@ -37,6 +48,7 @@ const userProfileSlice = createSlice({
         state.authorize = true;
         state.systemUser = getSessionProfile();
         state.event = getSessionEvent();
+        state.isScanner = getScanner();
         isClearSession = state.systemUser === undefined;
       }
 
@@ -44,8 +56,16 @@ const userProfileSlice = createSlice({
         state.systemUser = undefined;
         state.authorize = false;
         state.event = undefined;
+        state.eventId = 0;
         clearSession();
       }
+    },
+    setEventId(state, action: PayloadAction<number>) {
+      state.eventId = action.payload;
+    },
+    setIsScanner(state, action: PayloadAction<boolean>) {
+      state.isScanner = action.payload;
+      saveScanner(action.payload);
     },
     setProfile(state, action: PayloadAction<SystemUser>) {
       state.systemUser = action.payload;
@@ -56,6 +76,8 @@ const userProfileSlice = createSlice({
         state.systemUser = undefined;
         state.authorize = false;
         state.event = undefined;
+        state.eventId = 0;
+        state.isScanner = false;
         clearSession();
       }
     },
@@ -63,6 +85,8 @@ const userProfileSlice = createSlice({
       state.systemUser = undefined;
       state.authorize = false;
       state.event = undefined;
+      state.eventId = 0;
+      state.isScanner = false;
       clearSession();
     },
     saveSession(state) {
@@ -71,6 +95,12 @@ const userProfileSlice = createSlice({
     setEvent(state, action: PayloadAction<Event | undefined>) {
       state.event = action.payload;
       saveSessionEvent(action.payload!);
+    },
+    setPerson(state, action: PayloadAction<Person | undefined>) {
+      state.person = action.payload;
+    },
+    setScreen(state, action: PayloadAction<number>) {
+      state.screen = action.payload;
     },
     clearEvent(state) {
       state.event = undefined;

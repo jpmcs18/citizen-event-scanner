@@ -5,10 +5,10 @@ import { RootState } from '../state/store';
 import Approval from './scanner-component/approval';
 import CapturePhoto from './scanner-component/capture-photo';
 import PersonScanConfirmation from './scanner-component/person-scan-confirmation';
+import RepresentativeConfirmation from './scanner-component/representative-confirmation';
+import RepresentativeDisplay from './scanner-component/representative-display';
 import ScannerMainDisplay from './scanner-component/scanner-main-display';
 import SuccessScan from './scanner-component/success-scan';
-import RepresentativeDisplay from './scanner-component/representative-display';
-import RepresentativeConfirmation from './scanner-component/representative-confirmation';
 
 export default function ScannerPage() {
   const scannerState = useSelector((state: RootState) => state.scanner);

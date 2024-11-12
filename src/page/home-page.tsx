@@ -40,20 +40,6 @@ export default function HomePage() {
             </div>
             <div className='main-logo-text'>Event Scanner</div>
           </div>
-          {userProfileState.event && (
-            <button
-              className='btn-tool btn-home'
-              onClick={gotoHome}
-              title='Logout'>
-              <FontAwesomeIcon icon={faHome} />
-            </button>
-          )}
-          <button
-            className='btn-tool btn-logout'
-            onClick={logoutUser}
-            title='Logout'>
-            <FontAwesomeIcon icon={faPowerOff} />
-          </button>
           <BrowserRouter>
             <Routes>
               <Route
@@ -68,6 +54,24 @@ export default function HomePage() {
               <Route path={SystemModules.Scanner} element={<ScannerPage />} />
             </Routes>
           </BrowserRouter>
+          <div className='footer'>
+            <div>
+              {userProfileState.event && (
+                <button
+                  className='btn-tool btn-home'
+                  onClick={gotoHome}
+                  title='Logout'>
+                  <FontAwesomeIcon icon={faHome} />
+                </button>
+              )}
+            </div>
+            <button
+              className='btn-tool btn-logout'
+              onClick={logoutUser}
+              title='Logout'>
+              <FontAwesomeIcon icon={faPowerOff} />
+            </button>
+          </div>
         </div>
       ) : (
         <LoginPage />

@@ -15,9 +15,13 @@ export default function SucessScan() {
     <>
       <div className='main-display-text'>
         <img className='icon-logo' src={approveLogo} alt='Approve' />
-        {scannerState.isAttendance && <span>Attendance</span>}
-        {scannerState.isClaim && <span>Claim</span>}
-        <span> Confirmed</span>
+        <div>
+          {scannerState.isAttendance && (
+            <span className='semi-bold'>Attendance</span>
+          )}
+          {scannerState.isClaim && <span className='semi-bold'>Claim</span>}
+          <span className='semi-bold'> Confirmed</span>
+        </div>
       </div>
       <button className='btn color-green' onClick={onContinue}>
         Continue

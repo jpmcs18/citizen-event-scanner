@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Webcam from 'react-webcam';
 import {
@@ -18,6 +18,18 @@ export default function CapturePhoto() {
   const webcamRef = useRef<Webcam | null>(null);
   const setBusy = useSetBusy();
   const setToasterMessage = useSetToasterMessage();
+  useEffect(
+    () => {
+      trySave();
+    },
+    //eslint-disable-next-line
+    []
+  );
+  async function trySave() {
+    if (scannerState.isAttendance) {
+      await confirm();
+    }
+  }
   async function capture() {
     const imageSrc = webcamRef.current?.getScreenshot();
     const image = await resizeBase64Image(imageSrc!, 480, 480);
@@ -75,42 +87,48 @@ export default function CapturePhoto() {
   }
   return (
     <>
-      <div className='selfie-container'>
-        {scannerState.photo ? (
-          <img className='image' src={scannerState.photo} alt='Capture' />
-        ) : (
-          <Webcam
-            className='webcam'
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat='image/png'
-            width={500}
-            videoConstraints={{
-              height: 480,
-              width: 480,
-              aspectRatio: 1,
-              facingMode: 'environment',
-            }}
-          />
-        )}
-      </div>
-      {scannerState.photo ? (
+      {scannerState.isAttendance ? (
+        <p>Saving...</p>
+      ) : (
         <>
-          <button className='btn color-blue' onClick={reCapture}>
-            Recapture
-          </button>
-          <button className='btn color-green' onClick={confirm}>
-            Confirm
+          <div className='selfie-container'>
+            {scannerState.photo ? (
+              <img className='image' src={scannerState.photo} alt='Capture' />
+            ) : (
+              <Webcam
+                className='webcam'
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat='image/png'
+                width={500}
+                videoConstraints={{
+                  height: 480,
+                  width: 480,
+                  aspectRatio: 1,
+                  facingMode: 'environment',
+                }}
+              />
+            )}
+          </div>
+          {scannerState.photo ? (
+            <>
+              <button className='btn color-blue' onClick={reCapture}>
+                Recapture
+              </button>
+              <button className='btn color-green' onClick={confirm}>
+                Confirm
+              </button>
+            </>
+          ) : (
+            <button className='btn color-green' onClick={capture}>
+              Capture
+            </button>
+          )}
+          <button className='btn btn-cancel' onClick={cancel}>
+            Cancel
           </button>
         </>
-      ) : (
-        <button className='btn color-green' onClick={capture}>
-          Capture
-        </button>
       )}
-      <button className='btn btn-cancel' onClick={cancel}>
-        Cancel
-      </button>
     </>
   );
 }

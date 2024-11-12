@@ -51,3 +51,7 @@ export const SexEnd = {
 export const IdentificationTypeEnd = {
   GetList: 'identification-types',
 };
+
+export const AttendanceEnd = {
+  Insert: 'attendances',
+};

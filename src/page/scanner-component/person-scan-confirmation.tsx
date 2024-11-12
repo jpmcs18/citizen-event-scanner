@@ -25,6 +25,17 @@ export default function PersonScanConfirmation() {
   return (
     <>
       <div className='name'>{scannerState.person?.fullName}</div>
+      <div
+        className={
+          'name ' +
+          (scannerState.person?.verificationStatusId === 2
+            ? 'text-green'
+            : 'text-red')
+        }>
+        {scannerState.person?.verificationStatusId === 2
+          ? 'VERIFIED'
+          : 'UNVERIFIED'}
+      </div>
       <img
         className='image'
         src={scannerState.person?.selfieBase64}
@@ -33,39 +44,63 @@ export default function PersonScanConfirmation() {
       {userProfileState.event?.isTargetIndividualBenefeciaries
         ? !scannerState.person?.isInTheList &&
           userProfileState.event?.scanningTypeId !== 3 && (
-            <p className='not-in-list'>
-              <FontAwesomeIcon icon={faTimesCircle} /> NOT IN THE LIST
+            <p className='caption text-red'>
+              <FontAwesomeIcon icon={faTimesCircle} className='text-icon' />
+              <span>NOT IN THE LIST</span>
             </p>
           )
         : scannerState.person?.isHasFamily === false && (
-            <p className='not-in-list'>
-              <FontAwesomeIcon icon={faTimesCircle} /> NOT YET A MEMBER OF A
-              FAMILY
+            <p className='caption text-red'>
+              <FontAwesomeIcon className='text-icon' icon={faTimesCircle} />
+              <span>NOT YET A MEMBER OF A FAMILY</span>
             </p>
           )}
       {(scannerState.isAttendance &&
         scannerState.person?.isAttendanceScanned) ||
       (scannerState.isClaim && scannerState.person?.isClaimScanned) ? (
-        <p className='not-in-list text-green'>
+        <>
           {!userProfileState.event?.isTargetIndividualBenefeciaries ? (
             <>
-              <div>
-                <FontAwesomeIcon icon={faCheckCircle} />
-                &nbsp;
-                {'BENEFITS HAVE BEEN ' +
-                  (scannerState.isAttendance ? 'ATTENDED' : 'CLAIMED') +
-                  ' BY '}
-              </div>
-              <div className='text-red semi-bold  '>
-                {scannerState.isAttendance
-                  ? scannerState.person.familyMemberAttendance
-                  : scannerState.person.familyMemberClaim}
-              </div>
+              <p className='caption text-green'>
+                <FontAwesomeIcon className='text-icon' icon={faCheckCircle} />
+                <span>
+                  BENEFITS HAVE BEEN&nbsp;
+                  {scannerState.isAttendance ? 'ATTENDED' : 'CLAIMED'}
+                  &nbsp;BY
+                </span>
+              </p>
+              <p className='caption text-red semi-bold'>
+                <span>
+                  {scannerState.isAttendance
+                    ? scannerState.person.familyMemberAttendance
+                    : scannerState.person.familyMemberClaim}
+                </span>
+              </p>
             </>
           ) : (
-            'ALREADY ' + (scannerState.isAttendance ? 'ATTENDED' : 'CLAIMED')
+            <p className='caption text-green'>
+              <FontAwesomeIcon className='text-icon' icon={faCheckCircle} />
+              <span>
+                ALREADY {scannerState.isAttendance ? 'ATTENDED' : 'CLAIMED'}
+              </span>
+            </p>
           )}
-        </p>
+          {(scannerState.person?.claimRepresentative ||
+            scannerState.person.attendanceRepresentative) && (
+            <>
+              <p className='caption text-green'>
+                <span>REPRESENTED BY</span>
+              </p>
+              <p className='caption text-red'>
+                <span>
+                  {scannerState.isAttendance
+                    ? scannerState.person.attendanceRepresentative
+                    : scannerState.person?.claimRepresentative}
+                </span>
+              </p>
+            </>
+          )}
+        </>
       ) : !scannerState.person?.isInTheList &&
         userProfileState.event?.scanningTypeId === 2 ? (
         <button className='btn color-green' onClick={approve}>

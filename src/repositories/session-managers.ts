@@ -8,6 +8,7 @@ const token_add = '--pxx--';
 const profile_add = '--pxx-xdx--';
 const event_add = '--axx-xdx--';
 const theme = '--dark-theme--';
+const scanner_add = '--pxx-xsx--';
 
 function encrypt(data: string): string {
   return CryptoJS.AES.encrypt(data, APP_SECRET).toString();
@@ -73,4 +74,14 @@ export function clearSessionEvent() {
 
 export function clearSession() {
   localStorage.clear();
+}
+
+export function clearScanner() {
+  localStorage.removeItem(scanner_add);
+}
+export function getScanner(): boolean {
+  return localStorage.getItem(scanner_add) === 'true';
+}
+export function saveScanner(isScanner: boolean) {
+  localStorage.setItem(scanner_add, isScanner.toString());
 }
