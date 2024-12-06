@@ -12,20 +12,16 @@ export default function SucessScan() {
     dispatch(scannerActions.setScreen(1));
   }
   return (
-    <>
-      <div className='main-display-text'>
-        <img className='icon-logo' src={approveLogo} alt='Approve' />
-        <div>
-          {scannerState.isAttendance && (
-            <span className='semi-bold'>Attendance</span>
-          )}
-          {scannerState.isClaim && <span className='semi-bold'>Claim</span>}
-          <span className='semi-bold'> Confirmed</span>
-        </div>
+    <div className='success-scan'>
+      <img src={approveLogo} alt='Approve' />
+      <div className='text'>
+        {scannerState.isAttendance && <span>Attendance</span>}
+        {scannerState.isClaim && <span>Claim</span>}
+        <span> Confirmed</span>
       </div>
       <button className='btn color-green' onClick={onContinue}>
         Continue
       </button>
-    </>
+    </div>
   );
 }

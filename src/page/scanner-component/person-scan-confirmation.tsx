@@ -4,9 +4,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
+import { toDateMMM_dd_yyyy, toMMMdd_hhtt } from '../../helper';
 import { scannerActions } from '../../state/reducers/scanner-reducer';
 import { RootState } from '../../state/store';
-
+import errorLogo from '../../icons/error_.png';
 export default function PersonScanConfirmation() {
   const scannerState = useSelector((state: RootState) => state.scanner);
   const userProfileState = useSelector((state: RootState) => state.userProfile);
@@ -23,7 +24,7 @@ export default function PersonScanConfirmation() {
     dispatch(scannerActions.setScreen(1));
   }
   return (
-    <>
+    <div className='container'>
       <div className='name'>{scannerState.person?.fullName}</div>
       <div
         className={
@@ -36,6 +37,17 @@ export default function PersonScanConfirmation() {
           ? 'VERIFIED'
           : 'UNVERIFIED'}
       </div>
+      {scannerState.person?.checkAppointment && (
+        <div className='appointment'>
+          <div className='description'>
+            {scannerState.person?.appointmentType}
+          </div>
+          <div className='date'>
+            <div>APPOINTMENT</div>
+            {toMMMdd_hhtt(scannerState.person?.appointmentDate)}
+          </div>
+        </div>
+      )}
       <img
         className='image'
         src={scannerState.person?.selfieBase64}
@@ -43,7 +55,8 @@ export default function PersonScanConfirmation() {
       />
       {userProfileState.event?.isTargetIndividualBenefeciaries
         ? !scannerState.person?.isInTheList &&
-          userProfileState.event?.scanningTypeId !== 3 && (
+          userProfileState.event?.scanningTypeId !== 3 &&
+          !scannerState.person?.checkAppointment && (
             <p className='caption text-red'>
               <FontAwesomeIcon icon={faTimesCircle} className='text-icon' />
               <span>NOT IN THE LIST</span>
@@ -61,21 +74,24 @@ export default function PersonScanConfirmation() {
         <>
           {!userProfileState.event?.isTargetIndividualBenefeciaries ? (
             <>
-              <p className='caption text-green'>
-                <FontAwesomeIcon className='text-icon' icon={faCheckCircle} />
-                <span>
-                  BENEFITS HAVE BEEN&nbsp;
-                  {scannerState.isAttendance ? 'ATTENDED' : 'CLAIMED'}
-                  &nbsp;BY
-                </span>
-              </p>
-              <p className='caption text-red semi-bold'>
-                <span>
-                  {scannerState.isAttendance
-                    ? scannerState.person.familyMemberAttendance
-                    : scannerState.person.familyMemberClaim}
-                </span>
-              </p>
+              <img src={errorLogo} className='error-caption-logo' alt='error' />
+              <div className='caption text-red'>
+                BENEFITS &nbsp;
+                {scannerState.isAttendance ? 'ATTENDED' : 'CLAIMED'}
+                &nbsp;BY
+              </div>
+              <div className='name'>
+                {scannerState.isAttendance
+                  ? scannerState.person.familyMemberAttendance
+                  : scannerState.person.familyMemberClaim}
+              </div>{' '}
+              <div className='caption text-red'>
+                {toDateMMM_dd_yyyy(
+                  scannerState.isAttendance
+                    ? scannerState.person.attendanceDate
+                    : scannerState.person.claimDate
+                )}
+              </div>
             </>
           ) : (
             <p className='caption text-green'>
@@ -117,6 +133,6 @@ export default function PersonScanConfirmation() {
       <button className='btn btn-cancel' onClick={cancel}>
         Cancel
       </button>
-    </>
+    </div>
   );
 }

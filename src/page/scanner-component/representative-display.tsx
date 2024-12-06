@@ -44,7 +44,7 @@ export default function RepresentativeDisplay() {
       .finally(() => setBusy(false));
   }
   return (
-    <>
+    <div className='container'>
       <button className='btn color-green' onClick={scanQR}>
         Scan QR Code of Representative
       </button>
@@ -57,6 +57,6 @@ export default function RepresentativeDisplay() {
           title="Scan the Representative's QR Code"
         />
       )}
-    </>
+    </div>
   );
 }

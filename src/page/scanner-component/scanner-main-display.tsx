@@ -10,6 +10,7 @@ import {
 } from '../../custom-hooks/authorize-provider';
 import { scanEventPersonQRCode } from '../../repositories/event-queries';
 import QRCodeReader from '../modals/qrcode-reader';
+import { validateDate } from '../../helper';
 
 export default function ScannerMainDisplay() {
   const userProfileState = useSelector((state: RootState) => state.userProfile);
@@ -46,6 +47,22 @@ export default function ScannerMainDisplay() {
     await scanEventPersonQRCode(qrCode, userProfileState.event?.id ?? 0)
       .then((res) => {
         if (res) {
+          if (res.checkAppointment && !validateDate(res.appointmentDate)) {
+            dispatch(scannerActions.setScreen(8));
+            return;
+          }
+          if (
+            !userProfileState.event?.isTargetIndividualBenefeciaries &&
+            !res.isFamilyConfirmed
+          ) {
+            dispatch(scannerActions.setScreen(9));
+            return;
+          }
+          if (!res?.isScheduledBarangay) {
+            dispatch(scannerActions.setPerson(res));
+            dispatch(scannerActions.setScreen(10));
+            return;
+          }
           dispatch(scannerActions.setPerson(res));
           dispatch(scannerActions.setScreen(2));
         } else {
@@ -56,7 +73,7 @@ export default function ScannerMainDisplay() {
       .finally(() => setBusy(false));
   }
   return (
-    <>
+    <div className='container'>
       <div className='main-display-text'>
         {userProfileState.event?.description}
       </div>
@@ -75,9 +92,11 @@ export default function ScannerMainDisplay() {
           <button className='btn' onClick={scanClaim}>
             Scan QR Code for Claiming
           </button>
-          <button className='btn' onClick={scanClaimR}>
-            Scan QR Code for Representative Claiming
-          </button>
+          {!userProfileState.event?.attendanceScan && (
+            <button className='btn' onClick={scanClaimR}>
+              Scan QR Code for Representative Claiming
+            </button>
+          )}
         </>
       )}
       {qrcodeReaderState.isModalShow && (
@@ -86,6 +105,6 @@ export default function ScannerMainDisplay() {
           title="Scan the Beneficiary's QR Code"
         />
       )}
-    </>
+    </div>
   );
 }

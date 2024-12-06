@@ -86,7 +86,7 @@ export default function CapturePhoto() {
     }
   }
   return (
-    <>
+    <div className='container'>
       {scannerState.isAttendance ? (
         <p>Saving...</p>
       ) : (
@@ -129,6 +129,6 @@ export default function CapturePhoto() {
           </button>
         </>
       )}
-    </>
+    </div>
   );
 }

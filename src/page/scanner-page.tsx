@@ -9,6 +9,9 @@ import RepresentativeConfirmation from './scanner-component/representative-confi
 import RepresentativeDisplay from './scanner-component/representative-display';
 import ScannerMainDisplay from './scanner-component/scanner-main-display';
 import SuccessScan from './scanner-component/success-scan';
+import NoAppointmentError from './scanner-component/no-appointment-error';
+import UnconfirmedFamilyError from './scanner-component/unconfirmed-family-error';
+import BarangayNotScheduled from './scanner-component/barangay-not-scheduled';
 
 export default function ScannerPage() {
   const scannerState = useSelector((state: RootState) => state.scanner);
@@ -32,6 +35,9 @@ export default function ScannerPage() {
       {scannerState.screen === 5 && <RepresentativeConfirmation />}
       {scannerState.screen === 6 && <CapturePhoto />}
       {scannerState.screen === 7 && <SuccessScan />}
+      {scannerState.screen === 8 && <NoAppointmentError />}
+      {scannerState.screen === 9 && <UnconfirmedFamilyError />}
+      {scannerState.screen === 10 && <BarangayNotScheduled />}
     </div>
   );
 }

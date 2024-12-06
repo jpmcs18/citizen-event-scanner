@@ -1,4 +1,32 @@
 import printJS from 'print-js';
+const longMonths = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+const shortMonths = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sept',
+  'Oct',
+  'Nov',
+  'Dec',
+];
 export function validateFileSize(selectedFile: File | undefined) {
   const MAX_FILE_SIZE = 5120; // 5MB
 
@@ -113,6 +141,103 @@ export function getAge(date?: Date | undefined) {
   var age_dt = new Date(month_diff);
   var year = age_dt.getUTCFullYear();
   return Math.abs(year - 1970);
+}
+
+export function toDateMMM_dd_yyyy(date?: Date | null): string {
+  if (date === undefined || date === null) return '';
+
+  const d = new Date(date);
+  return (
+    shortMonths[d.getMonth()] +
+    ' ' +
+    d.getDate().toString().padStart(2, '0') +
+    ', ' +
+    d.getFullYear()
+  );
+}
+
+/**
+ * @returns formated date MMMM dd, yyyy
+ */
+export function toDateMMMM_dd_yyyy(date?: Date | null): string {
+  if (date === undefined || date === null) return '';
+
+  const d = new Date(date);
+  return (
+    longMonths[d.getMonth()] +
+    ' ' +
+    d.getDate().toString().padStart(2, '0') +
+    ', ' +
+    d.getFullYear()
+  );
+}
+
+/**
+ * @returns formated date yyyy-MM-dd
+ */
+export function toDateyyyyMMdd(date?: Date | null): string {
+  if (date === undefined || date === null) return '';
+  const d = new Date(date);
+  return (
+    d.getFullYear() +
+    '-' +
+    (d.getMonth() + 1).toString().padStart(2, '0') +
+    '-' +
+    d.getDate().toString().padStart(2, '0')
+  );
+}
+
+/**
+ * @returns formated date MM/dd/yyyy
+ */
+export function toDateMMddyyyy(date?: Date | null): string {
+  if (date === undefined || date === null) return '';
+  const d = new Date(date);
+  return (
+    (d.getMonth() + 1).toString().padStart(2, '0') +
+    '/' +
+    d.getDate().toString().padStart(2, '0') +
+    '/' +
+    d.getFullYear()
+  );
+}
+
+export function toDateNameMMddyyyy(date?: Date | null): string {
+  if (date === undefined || date === null) return '';
+  const d = new Date(date);
+  return (
+    (d.getMonth() + 1).toString().padStart(2, '0') +
+    '_' +
+    d.getDate().toString().padStart(2, '0') +
+    '_' +
+    d.getFullYear()
+  );
+}
+
+export function to12HoursTimeDisplay(date?: Date | null): string {
+  if (date === undefined || date === null) return '';
+  const d = new Date(date);
+  const hours = d.getHours() > 12 ? d.getHours() - 12 : d.getHours();
+  const minutes = d.getMinutes();
+  const ampm = d.getHours() > 11 ? 'PM' : 'AM';
+  return `${hours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')} ${ampm}`;
+}
+export function toMMMdd_hhtt(date?: Date | null): string {
+  if (date === undefined || date === null) return '';
+  const d = new Date(date);
+  const hours = d.getHours() > 12 ? d.getHours() - 12 : d.getHours();
+  const ampm = d.getHours() > 11 ? 'PM' : 'AM';
+  return `${shortMonths[d.getMonth()]}. ${d
+    .getDate()
+    .toString()
+    .padStart(2, '0')} - ${hours.toString().padStart(2, '0')} ${ampm}`;
+}
+export function to12HoursDateTimeDisplay(date?: Date | null): string {
+  if (date === undefined || date === null) return '';
+  const d = new Date(date);
+  return toDateMMM_dd_yyyy(d) + ' ' + to12HoursTimeDisplay(d);
 }
 export function toDateDisplay(date?: Date | null): string {
   if (date === undefined || date === null) return '';

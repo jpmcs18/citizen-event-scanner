@@ -18,7 +18,7 @@
   --login-backgroud-color: #fff;
   --login-header-foreground-color: #b70000;
   --blocker-color: #000;
-  --main-background-color: #eef9ff;
+  --main-background-color: #fff;
   --background-color: #fff;
   --primary-color: #de2222;
   --primary-color2: #ce3838;
@@ -66,7 +66,8 @@
   --green-color: #19af02;
   --green-color-accent: white;
   --label-size: 0.7rem;
-  --normal-font-size: 1.5rem;
+  --normal-font-size: 1.2rem;
+  --name-font-size: 1.4rem;
   --input-font-size: 1rem;
   --message-font-size: 1.4rem;
   --banner-font-size: 1rem;
@@ -155,8 +156,52 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.error-scan,
+.success-scan {
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.error-scan img,
+.success-scan img {
+  width: min(10em, 50dvw);
+}
+.error-scan .text,
+.success-scan .text {
+  margin: 1.5em;
+  text-align: center;
+  font-weight: var(--demibold);
+}
+.error-scan .text span,
+.success-scan .text span {
+  font-weight: var(--demibold);
+}
+
+.appointment .description {
+  text-align: center;
+  color: var(--green-color);
+  font-weight: var(--demibold);
+  font-size: 1.2rem;
+}
+.appointment .date {
+  text-align: center;
+  font-size: 1rem;
+  margin: 0.5em;
+  color: var(--red-color);
+  font-weight: var(--demibold);
+  width: 90dvw;
+  background-color: white;
+  padding: 0.5em;
+  box-shadow: 0em 0em 0.1em var(--shadow-color);
+}
+.appointment .date div {
+  margin-bottom: 0.5em;
+}
+
 .main-body-container {
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -177,10 +222,8 @@
 .main-body-container .body-content {
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
   overflow: auto;
-  height: 100%;
 }
 .main-body-container .body-content .header {
   font-weight: var(--demibold);
@@ -201,7 +244,7 @@
   border: 0.1em solid var(--red-color);
 }
 .main-body-container .body-content .main-display-text {
-  margin: 1.5em 1em;
+  margin: 1.5em;
   font-weight: var(--demibold);
   text-align: center;
 }
@@ -222,8 +265,9 @@
 }
 .main-body-container .body-content .name {
   font-weight: var(--demibold);
-  margin: 0.5em;
+  margin: 0.2em;
   text-align: center;
+  font-size: var(--name-font-size);
 }
 .main-body-container .body-content .image {
   box-shadow: 0em 0em 0.5em var(--shadow-color);
@@ -232,10 +276,16 @@
   width: min(70dvw, 12em);
   aspect-ratio: 1;
 }
+.main-body-container .body-content .error-caption-logo {
+  width: 4em;
+  aspect-ratio: 1;
+  margin: 0.5em;
+}
 .main-body-container .body-content .caption {
   display: flex;
   align-items: center;
   margin: 0em;
+  font-weight: var(--demibold);
 }
 .main-body-container .body-content .caption span {
   font-weight: var(--demibold);
@@ -277,8 +327,8 @@ body {
   font-size: var(--normal-font-size);
 }
 
-.bold-style {
-  font-weight: var(--demibold) !important;
+.bold {
+  font-weight: var(--bold) !important;
 }
 
 .table-container {
@@ -351,6 +401,14 @@ section {
   margin: 0 auto;
 }
 
+.container {
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 .main-display {
   padding: 0em !important;
 }
@@ -399,7 +457,7 @@ section {
   margin-bottom: 1em;
 }
 .login-base-container .logo-side .icon .navoteno-logo {
-  width: 12em;
+  width: 10em;
 }
 .login-base-container .login-side {
   width: 100%;

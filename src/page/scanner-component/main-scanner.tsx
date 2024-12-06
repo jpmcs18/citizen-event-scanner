@@ -24,7 +24,7 @@ export default function MainScanner() {
   );
 
   return (
-    <>
+    <div className='container'>
       <div className='main-display-text'>
         Hi {userProfileState.systemUser?.displayName}!
       </div>
@@ -47,6 +47,6 @@ export default function MainScanner() {
       <button className='btn' onClick={() => scanQRCode(2)}>
         Scan QR Code for Attendance
       </button>
-    </>
+    </div>
   );
 }

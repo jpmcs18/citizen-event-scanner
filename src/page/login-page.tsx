@@ -77,7 +77,7 @@ export default function LoginPage() {
     }
   }
   return (
-    <section>
+    <div className='container'>
       {loginState.screen === 0 && (
         <div className='login-base-container'>
           <div className='logo-side login-container'>
@@ -122,6 +122,6 @@ export default function LoginPage() {
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 }
