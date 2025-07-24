@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import EventPerson from '../../models/response-model/EventPerson';
 import Person from '../../models/entities/Person';
+import EventPerson from '../../models/response-model/EventPerson';
 
 interface State {
   person: EventPerson | undefined;
@@ -9,9 +9,12 @@ interface State {
   isAttendance: boolean;
   isClaim: boolean;
   photo: string | undefined;
+  sign: string | undefined;
   approvedId: number | undefined;
   hasRepresentative: boolean;
   representative: Person | undefined;
+  error: string | undefined;
+  subError: string | undefined;
 }
 
 const initialState: State = {
@@ -21,9 +24,12 @@ const initialState: State = {
   isAttendance: false,
   isClaim: false,
   photo: undefined,
+  sign: undefined,
   approvedId: undefined,
   hasRepresentative: false,
   representative: undefined,
+  error: undefined,
+  subError: undefined,
 };
 
 const scannerSlice = createSlice({
@@ -42,7 +48,10 @@ const scannerSlice = createSlice({
         state.isClaim = false;
         state.isAttendance = false;
         state.photo = undefined;
+        state.sign = undefined;
         state.hasRepresentative = false;
+        state.error = undefined;
+        state.subError = undefined;
       }
       if (action.payload === 3) {
         state.approverPasscode = undefined;
@@ -71,11 +80,20 @@ const scannerSlice = createSlice({
     setPhoto(state, action: PayloadAction<string | undefined>) {
       state.photo = action.payload;
     },
+    setSign(state, action: PayloadAction<string | undefined>) {
+      state.sign = action.payload;
+    },
     setHasRepresentative(state, action: PayloadAction<boolean>) {
       state.hasRepresentative = action.payload;
     },
     setRepresentative(state, action: PayloadAction<Person | undefined>) {
       state.representative = action.payload;
+    },
+    setError(state, action: PayloadAction<string | undefined>) {
+      state.error = action.payload;
+    },
+    setSubError(state, action: PayloadAction<string | undefined>) {
+      state.subError = action.payload;
     },
   },
 });

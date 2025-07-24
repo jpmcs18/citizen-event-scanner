@@ -17,7 +17,7 @@ export default interface Event {
   claimScan: boolean;
   isWithConfirmation: boolean | undefined;
   scanningTypeId: number | undefined;
-
+  checkAppointment: boolean | undefined;
   eventScanningType?: EventScanningType;
   fundSource?: FundSource;
   eventSponsors?: EventSponsor[];

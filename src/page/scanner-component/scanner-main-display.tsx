@@ -1,16 +1,11 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../state/store';
-import { useDispatch } from 'react-redux';
-import { scannerActions } from '../../state/reducers/scanner-reducer';
-import { qrcodeReaderActions } from '../../state/reducers/qrcode-reader-reducer';
-import {
-  useSetBusy,
-  useSetToasterMessage,
-} from '../../custom-hooks/authorize-provider';
-import { scanEventPersonQRCode } from '../../repositories/event-queries';
-import QRCodeReader from '../modals/qrcode-reader';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSetBusy } from '../../custom-hooks/authorize-provider';
 import { validateDate } from '../../helper';
+import { scanEventPersonQRCode } from '../../repositories/event-queries';
+import { qrcodeReaderActions } from '../../state/reducers/qrcode-reader-reducer';
+import { scannerActions } from '../../state/reducers/scanner-reducer';
+import { RootState } from '../../state/store';
+import QRCodeReader from '../modals/qrcode-reader';
 
 export default function ScannerMainDisplay() {
   const userProfileState = useSelector((state: RootState) => state.userProfile);
@@ -18,7 +13,6 @@ export default function ScannerMainDisplay() {
     (state: RootState) => state.qrcodeReader
   );
   const setBusy = useSetBusy();
-  const setToasterMessage = useSetToasterMessage();
   const dispatch = useDispatch();
 
   function scanAttendance() {
@@ -47,7 +41,13 @@ export default function ScannerMainDisplay() {
     await scanEventPersonQRCode(qrCode, userProfileState.event?.id ?? 0)
       .then((res) => {
         if (res) {
+          if (res.verificationStatusId !== 2) {
+            dispatch(scannerActions.setError('NOT YET VERIFIED'));
+            dispatch(scannerActions.setScreen(8));
+            return;
+          }
           if (res.checkAppointment && !validateDate(res.appointmentDate)) {
+            dispatch(scannerActions.setError('NO APPOINTMENT FOUND'));
             dispatch(scannerActions.setScreen(8));
             return;
           }
@@ -55,21 +55,27 @@ export default function ScannerMainDisplay() {
             !userProfileState.event?.isTargetIndividualBenefeciaries &&
             !res.isFamilyConfirmed
           ) {
-            dispatch(scannerActions.setScreen(9));
+            dispatch(scannerActions.setError('FAMILY HAS NOT BEEN APPROVED'));
+            dispatch(scannerActions.setScreen(8));
             return;
           }
           if (!res?.isScheduledBarangay) {
-            dispatch(scannerActions.setPerson(res));
-            dispatch(scannerActions.setScreen(10));
+            dispatch(scannerActions.setError('BARANGAY IS NOT SCHEDULED'));
+            dispatch(scannerActions.setSubError(res.barangay));
+            dispatch(scannerActions.setScreen(8));
             return;
           }
           dispatch(scannerActions.setPerson(res));
           dispatch(scannerActions.setScreen(2));
         } else {
-          setToasterMessage({ content: 'Invalid QR Code' });
+          dispatch(scannerActions.setError('INVALID QR CODE'));
+          dispatch(scannerActions.setScreen(8));
         }
       })
-      .catch((err) => setToasterMessage({ content: err.message }))
+      .catch((err) => {
+        dispatch(scannerActions.setError(err.message));
+        dispatch(scannerActions.setScreen(8));
+      })
       .finally(() => setBusy(false));
   }
   return (

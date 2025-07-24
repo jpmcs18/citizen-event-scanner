@@ -5,6 +5,7 @@ export async function saveClaim(
   personId: number,
   eventId: number,
   image: string,
+  sign: string,
   approverId: number | undefined,
   representedBy: number | undefined
 ): Promise<boolean | undefined> {
@@ -12,6 +13,7 @@ export async function saveClaim(
     personId,
     eventId,
     image,
+    sign,
     approverId,
     representedBy,
   });

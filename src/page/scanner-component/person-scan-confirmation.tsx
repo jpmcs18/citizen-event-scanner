@@ -56,7 +56,8 @@ export default function PersonScanConfirmation() {
       {userProfileState.event?.isTargetIndividualBenefeciaries
         ? !scannerState.person?.isInTheList &&
           userProfileState.event?.scanningTypeId !== 3 &&
-          !scannerState.person?.checkAppointment && (
+          !userProfileState.event?.checkAppointment &&
+          userProfileState.event?.checkAppointment && (
             <p className='caption text-red'>
               <FontAwesomeIcon icon={faTimesCircle} className='text-icon' />
               <span>NOT IN THE LIST</span>

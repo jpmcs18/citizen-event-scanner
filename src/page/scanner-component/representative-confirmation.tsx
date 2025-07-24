@@ -16,16 +16,16 @@ export default function RepresentativeConfirmation() {
     dispatch(scannerActions.setScreen(6));
   }
   return (
-    <>
+    <div className='container'>
       <div className='name'>{scannerState.representative?.fullName}</div>
       <div
         className={
           'name ' +
-          (scannerState.person?.verificationStatusId === 2
+          (scannerState.representative?.verificationStatusId === 2
             ? 'text-green'
             : 'text-red')
         }>
-        {scannerState.person?.verificationStatusId === 2
+        {scannerState.representative?.verificationStatusId === 2
           ? 'VERIFIED'
           : 'UNVERIFIED'}
       </div>
@@ -47,6 +47,6 @@ export default function RepresentativeConfirmation() {
       <button className='btn btn-cancel' onClick={cancel}>
         Cancel
       </button>
-    </>
+    </div>
   );
 }

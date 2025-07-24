@@ -291,6 +291,13 @@
         font-size: var(--title-font-size);
       }
     }
+    .image {
+      box-shadow: 0em 0em 0.5em var(--shadow-color);
+      border: 0.01em solid black;
+      margin: 1em;
+      width: min(70dvw, 12em);
+      aspect-ratio: 1;
+    }
     .webcam {
       box-shadow: 0em 0em 0.5em var(--shadow-color);
       border: 0.01em solid black;
@@ -314,6 +321,19 @@
     .btn-logout {
       justify-self: flex-end !important;
     }
+  }
+}
+
+.signature-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1em;
+  .sigCanvas {
+    box-shadow: 0em 0em 0.2em 0em var(--shadow-color);
+    border-radius: 0.3;
+    z-index: 2;
   }
 }
 body {

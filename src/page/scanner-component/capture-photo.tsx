@@ -1,23 +1,22 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Webcam from 'react-webcam';
+import { resizeBase64Image } from '../../helper';
+import { scannerActions } from '../../state/reducers/scanner-reducer';
+import { RootState } from '../../state/store';
+import { saveAttendance } from '../../repositories/event-attendance-queries';
 import {
   useSetBusy,
   useSetToasterMessage,
 } from '../../custom-hooks/authorize-provider';
-import { resizeBase64Image } from '../../helper';
-import { saveAttendance } from '../../repositories/event-attendance-queries';
-import { saveClaim } from '../../repositories/event-claim-queries';
-import { scannerActions } from '../../state/reducers/scanner-reducer';
-import { RootState } from '../../state/store';
 
 export default function CapturePhoto() {
   const scannerState = useSelector((state: RootState) => state.scanner);
-  const userProfileState = useSelector((state: RootState) => state.userProfile);
   const dispatch = useDispatch();
-  const webcamRef = useRef<Webcam | null>(null);
+  const userProfileState = useSelector((state: RootState) => state.userProfile);
   const setBusy = useSetBusy();
   const setToasterMessage = useSetToasterMessage();
+  const webcamRef = useRef<Webcam | null>(null);
   useEffect(
     () => {
       trySave();
@@ -27,7 +26,27 @@ export default function CapturePhoto() {
   );
   async function trySave() {
     if (scannerState.isAttendance) {
-      await confirm();
+      if (scannerState.isAttendance) {
+        setBusy(true);
+        await saveAttendance(
+          scannerState.person?.id ?? 0,
+          userProfileState.event?.id ?? 0,
+          scannerState.photo ?? '',
+          scannerState.approvedId,
+          scannerState.hasRepresentative
+            ? scannerState.representative?.id
+            : undefined
+        )
+          .then((res) => {
+            if (res) {
+              dispatch(scannerActions.setScreen(7));
+            } else {
+              setToasterMessage({ content: 'Unable to save attendance' });
+            }
+          })
+          .catch((err) => setToasterMessage({ content: err.message }))
+          .finally(() => setBusy(false));
+      }
     }
   }
   async function capture() {
@@ -41,49 +60,8 @@ export default function CapturePhoto() {
   function cancel() {
     dispatch(scannerActions.setScreen(1));
   }
-  async function confirm() {
-    setBusy(true);
-    if (scannerState.isAttendance) {
-      await saveAttendance(
-        scannerState.person?.id ?? 0,
-        userProfileState.event?.id ?? 0,
-        scannerState.photo ?? '',
-        scannerState.approvedId,
-        scannerState.hasRepresentative
-          ? scannerState.representative?.id
-          : undefined
-      )
-        .then((res) => {
-          if (res) {
-            dispatch(scannerActions.setScreen(7));
-          } else {
-            setToasterMessage({ content: 'Unable to save attendance' });
-          }
-        })
-        .catch((err) => setToasterMessage({ content: err.message }))
-        .finally(() => setBusy(false));
-    }
-
-    if (scannerState.isClaim) {
-      await saveClaim(
-        scannerState.person?.id ?? 0,
-        userProfileState.event?.id ?? 0,
-        scannerState.photo ?? '',
-        scannerState.approvedId,
-        scannerState.hasRepresentative
-          ? scannerState.representative?.id
-          : undefined
-      )
-        .then((res) => {
-          if (res) {
-            dispatch(scannerActions.setScreen(7));
-          } else {
-            setToasterMessage({ content: 'Unable to save claim' });
-          }
-        })
-        .catch((err) => setToasterMessage({ content: err.message }))
-        .finally(() => setBusy(false));
-    }
+  function confirm() {
+    dispatch(scannerActions.setScreen(9));
   }
   return (
     <div className='container'>
@@ -92,6 +70,7 @@ export default function CapturePhoto() {
       ) : (
         <>
           <div className='selfie-container'>
+            <div className='main-display-text'>Capture Photo</div>
             {scannerState.photo ? (
               <img className='image' src={scannerState.photo} alt='Capture' />
             ) : (

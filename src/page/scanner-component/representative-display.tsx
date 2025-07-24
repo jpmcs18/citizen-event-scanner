@@ -1,8 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  useSetBusy,
-  useSetToasterMessage,
-} from '../../custom-hooks/authorize-provider';
+import { useSetBusy } from '../../custom-hooks/authorize-provider';
 import { scanPersonQRCode } from '../../repositories/person-queries';
 import { qrcodeReaderActions } from '../../state/reducers/qrcode-reader-reducer';
 import { scannerActions } from '../../state/reducers/scanner-reducer';
@@ -15,7 +12,6 @@ export default function RepresentativeDisplay() {
   );
   const scannerState = useSelector((state: RootState) => state.scanner);
   const setBusy = useSetBusy();
-  const setToasterMessage = useSetToasterMessage();
   const dispatch = useDispatch();
   function scanQR() {
     dispatch(qrcodeReaderActions.setShowModal(true));
@@ -28,19 +24,37 @@ export default function RepresentativeDisplay() {
     await scanPersonQRCode(qrCode)
       .then((res) => {
         if (res) {
+          if (res.barangay?.name !== scannerState.person?.barangay) {
+            dispatch(
+              scannerActions.setError(
+                'BENEFICIARY AND REPRESENTATIVE MUST BE IN THE SAME BARANGAY'
+              )
+            );
+            dispatch(qrcodeReaderActions.setShowModal(false));
+            dispatch(scannerActions.setScreen(8));
+            return;
+          }
+          console.log(res, scannerState.person);
           if (res.id === scannerState.person?.id) {
-            setToasterMessage({
-              content: 'The Representative must not be the Beneficiary',
-            });
+            dispatch(
+              scannerActions.setError(
+                'THE REPRESENTATIVE MUST NOT BE THE BENEFICIARY'
+              )
+            );
+            dispatch(scannerActions.setScreen(8));
           } else {
             dispatch(scannerActions.setRepresentative(res));
             dispatch(scannerActions.setScreen(5));
           }
         } else {
-          setToasterMessage({ content: 'Invalid QR Code' });
+          dispatch(scannerActions.setError('INVALID QR CODE'));
+          dispatch(scannerActions.setScreen(8));
         }
       })
-      .catch((err) => setToasterMessage({ content: err.message }))
+      .catch((err) => {
+        dispatch(scannerActions.setError(err.message));
+        dispatch(scannerActions.setScreen(8));
+      })
       .finally(() => setBusy(false));
   }
   return (

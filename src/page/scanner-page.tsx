@@ -4,14 +4,13 @@ import { SystemModules } from '../routes';
 import { RootState } from '../state/store';
 import Approval from './scanner-component/approval';
 import CapturePhoto from './scanner-component/capture-photo';
+import ErrorScan from './scanner-component/error-scan';
 import PersonScanConfirmation from './scanner-component/person-scan-confirmation';
 import RepresentativeConfirmation from './scanner-component/representative-confirmation';
 import RepresentativeDisplay from './scanner-component/representative-display';
 import ScannerMainDisplay from './scanner-component/scanner-main-display';
 import SuccessScan from './scanner-component/success-scan';
-import NoAppointmentError from './scanner-component/no-appointment-error';
-import UnconfirmedFamilyError from './scanner-component/unconfirmed-family-error';
-import BarangayNotScheduled from './scanner-component/barangay-not-scheduled';
+import CaptureSignature from './scanner-component/capture-signature';
 
 export default function ScannerPage() {
   const scannerState = useSelector((state: RootState) => state.scanner);
@@ -35,9 +34,11 @@ export default function ScannerPage() {
       {scannerState.screen === 5 && <RepresentativeConfirmation />}
       {scannerState.screen === 6 && <CapturePhoto />}
       {scannerState.screen === 7 && <SuccessScan />}
-      {scannerState.screen === 8 && <NoAppointmentError />}
+      {scannerState.screen === 8 && <ErrorScan />}
+      {scannerState.screen === 9 && <CaptureSignature />}
+      {/* {scannerState.screen === 8 && <NoAppointmentError />}
       {scannerState.screen === 9 && <UnconfirmedFamilyError />}
-      {scannerState.screen === 10 && <BarangayNotScheduled />}
+      {scannerState.screen === 10 && <BarangayNotScheduled />} */}
     </div>
   );
 }
