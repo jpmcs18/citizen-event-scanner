@@ -85,7 +85,16 @@ export default function PersonScanConfirmation() {
                 {scannerState.isAttendance
                   ? scannerState.person.familyMemberAttendance
                   : scannerState.person.familyMemberClaim}
-              </div>{' '}
+              </div>
+              <img
+                className='image'
+                src={scannerState.person?.familyMemberSelfieBase64}
+                alt={
+                  scannerState.isAttendance
+                    ? scannerState.person.familyMemberAttendance
+                    : scannerState.person.familyMemberClaim
+                }
+              />
               <div className='caption text-red'>
                 {toDateMMM_dd_yyyy(
                   scannerState.isAttendance

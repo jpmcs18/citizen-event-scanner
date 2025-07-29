@@ -41,11 +41,6 @@ export default function ScannerMainDisplay() {
     await scanEventPersonQRCode(qrCode, userProfileState.event?.id ?? 0)
       .then((res) => {
         if (res) {
-          if (res.verificationStatusId !== 2) {
-            dispatch(scannerActions.setError('NOT YET VERIFIED'));
-            dispatch(scannerActions.setScreen(8));
-            return;
-          }
           if (res.checkAppointment && !validateDate(res.appointmentDate)) {
             dispatch(scannerActions.setError('NO APPOINTMENT FOUND'));
             dispatch(scannerActions.setScreen(8));

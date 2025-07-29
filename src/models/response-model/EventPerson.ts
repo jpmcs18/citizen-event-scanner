@@ -14,6 +14,7 @@ export default interface EventPerson {
   checkAppointment: boolean | undefined;
   familyMemberClaim: string | undefined;
   familyMemberAttendance: string | undefined;
+  familyMemberSelfieBase64: string | undefined;
   attendanceRepresentative: string | undefined;
   claimRepresentative: string | undefined;
   attendanceDate: Date | undefined;
