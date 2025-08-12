@@ -48,11 +48,19 @@ export default function PersonScanConfirmation() {
           </div>
         </div>
       )}
-      <img
-        className='image'
-        src={scannerState.person?.selfieBase64}
-        alt={scannerState.person?.fullName}
-      />
+      {scannerState.isClaim && scannerState.person?.isClaimScanned ? (
+        <img
+          className='image'
+          src={scannerState.person?.familyMemberSelfieBase64}
+          alt='Claim Scanned'
+        />
+      ) : (
+        <img
+          className='image'
+          src={scannerState.person?.selfieBase64}
+          alt={scannerState.person?.fullName}
+        />
+      )}
       {userProfileState.event?.isTargetIndividualBenefeciaries
         ? !scannerState.person?.isInTheList &&
           userProfileState.event?.scanningTypeId !== 3 &&
@@ -86,15 +94,6 @@ export default function PersonScanConfirmation() {
                   ? scannerState.person.familyMemberAttendance
                   : scannerState.person.familyMemberClaim}
               </div>
-              <img
-                className='image'
-                src={scannerState.person?.familyMemberSelfieBase64}
-                alt={
-                  scannerState.isAttendance
-                    ? scannerState.person.familyMemberAttendance
-                    : scannerState.person.familyMemberClaim
-                }
-              />
               <div className='caption text-red'>
                 {toDateMMM_dd_yyyy(
                   scannerState.isAttendance
