@@ -15,6 +15,8 @@ interface State {
   representative: Person | undefined;
   error: string | undefined;
   subError: string | undefined;
+  officeId: number | undefined;
+  purpose: string | undefined;
 }
 
 const initialState: State = {
@@ -30,6 +32,8 @@ const initialState: State = {
   representative: undefined,
   error: undefined,
   subError: undefined,
+  officeId: undefined,
+  purpose: undefined,
 };
 
 const scannerSlice = createSlice({
@@ -52,6 +56,8 @@ const scannerSlice = createSlice({
         state.hasRepresentative = false;
         state.error = undefined;
         state.subError = undefined;
+        state.officeId = undefined;
+        state.purpose = undefined;
       }
       if (action.payload === 3) {
         state.approverPasscode = undefined;
@@ -94,6 +100,12 @@ const scannerSlice = createSlice({
     },
     setSubError(state, action: PayloadAction<string | undefined>) {
       state.subError = action.payload;
+    },
+    setOffice(state, action: PayloadAction<string | undefined>) {
+      state.officeId = +(action.payload ?? 0);
+    },
+    setPurpose(state, action: PayloadAction<string | undefined>) {
+      state.purpose = action.payload;
     },
   },
 });

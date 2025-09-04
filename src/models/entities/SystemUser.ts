@@ -9,7 +9,9 @@ export default interface SystemUser {
   displayName: string;
   employeeId: number | undefined;
   userTypeId: number | undefined;
-
+  allowScanner: boolean | undefined;
+  allowVerificationScanner: boolean | undefined;
+  allowAttendanceScanner: boolean | undefined;
   userType?: SystemUserType;
   employee?: Employee;
   userAccesses?: UserAccess[];

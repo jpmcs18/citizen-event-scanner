@@ -8,6 +8,9 @@ import { toDateMMM_dd_yyyy, toMMMdd_hhtt } from '../../helper';
 import { scannerActions } from '../../state/reducers/scanner-reducer';
 import { RootState } from '../../state/store';
 import errorLogo from '../../icons/error_.png';
+import CustomDropdown from '../components/custom-dropdown';
+import { offices } from '../../constant';
+import CustomTextArea from '../components/custom-textarea';
 export default function PersonScanConfirmation() {
   const scannerState = useSelector((state: RootState) => state.scanner);
   const userProfileState = useSelector((state: RootState) => state.userProfile);
@@ -26,6 +29,14 @@ export default function PersonScanConfirmation() {
   return (
     <div className='container'>
       <div className='name'>{scannerState.person?.fullName}</div>
+      {scannerState.isAttendance && (
+        <div
+          className={
+            'name ' + (scannerState.person?.hasIn ? 'text-red' : 'text-green')
+          }>
+          {scannerState.person?.hasIn ? 'OUT' : 'IN'}
+        </div>
+      )}
       <div
         className={
           'name ' +
@@ -61,6 +72,28 @@ export default function PersonScanConfirmation() {
           alt={scannerState.person?.fullName}
         />
       )}
+      {scannerState.isAttendance &&
+        !scannerState.person?.isAttendanceScanned && (
+          <>
+            <CustomDropdown
+              title='Target Office'
+              itemsList={offices.map((x) => {
+                return {
+                  key: x.id.toString(),
+                  value: x.description,
+                };
+              })}
+              value={scannerState.officeId}
+              onChange={(x) => dispatch(scannerActions.setOffice(x.value))}
+            />
+            <CustomTextArea
+              lines={3}
+              title='Purpose'
+              value={scannerState.purpose}
+              onChange={(x) => dispatch(scannerActions.setPurpose(x.value))}
+            />
+          </>
+        )}
       {userProfileState.event?.isTargetIndividualBenefeciaries
         ? !scannerState.person?.isInTheList &&
           userProfileState.event?.scanningTypeId !== 3 &&
@@ -77,9 +110,7 @@ export default function PersonScanConfirmation() {
               <span>NOT YET A MEMBER OF A FAMILY</span>
             </p>
           )}
-      {(scannerState.isAttendance &&
-        scannerState.person?.isAttendanceScanned) ||
-      (scannerState.isClaim && scannerState.person?.isClaimScanned) ? (
+      {scannerState.isClaim && scannerState.person?.isClaimScanned ? (
         <>
           {!userProfileState.event?.isTargetIndividualBenefeciaries ? (
             <>
@@ -105,9 +136,7 @@ export default function PersonScanConfirmation() {
           ) : (
             <p className='caption text-green'>
               <FontAwesomeIcon className='text-icon' icon={faCheckCircle} />
-              <span>
-                ALREADY {scannerState.isAttendance ? 'ATTENDED' : 'CLAIMED'}
-              </span>
+              <span>ALREADY CLAIMED</span>
             </p>
           )}
           {(scannerState.person?.claimRepresentative ||

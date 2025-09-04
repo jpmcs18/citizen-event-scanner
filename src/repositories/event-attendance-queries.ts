@@ -6,7 +6,9 @@ export async function saveAttendance(
   eventId: number,
   image: string,
   approverId: number | undefined,
-  representedBy: number | undefined
+  representedBy: number | undefined,
+  officeId: number | undefined,
+  purpose: string | undefined
 ): Promise<boolean | undefined> {
   return await httpPost(EventAttendanceEnd.Save, {
     personId,
@@ -14,5 +16,7 @@ export async function saveAttendance(
     image,
     approverId,
     representedBy,
+    officeId,
+    purpose,
   });
 }
