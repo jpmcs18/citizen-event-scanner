@@ -9,6 +9,7 @@ const profile_add = '--pxx-xdx--';
 const event_add = '--axx-xdx--';
 const theme = '--dark-theme--';
 const scanner_add = '--pxx-xsx--';
+const scan_log_add = '--sxx-xsx--';
 
 function encrypt(data: string): string {
   return CryptoJS.AES.encrypt(data, APP_SECRET).toString();
@@ -84,4 +85,15 @@ export function getScanner(): boolean {
 }
 export function saveScanner(isScanner: boolean) {
   localStorage.setItem(scanner_add, isScanner.toString());
+}
+
+export function getScanLog(): string | null {
+  try {
+    return localStorage.getItem(scan_log_add);
+  } catch {
+    return null;
+  }
+}
+export function saveScanLog(log: string) {
+  localStorage.setItem(scan_log_add, log);
 }

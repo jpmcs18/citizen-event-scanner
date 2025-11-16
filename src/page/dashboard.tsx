@@ -1,7 +1,4 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../state/store';
-import MainScanner from './scanner-component/main-scanner';
-import PersonVerifier from './scanner-component/person-verifier';
 import { events } from '../constant';
 import {
   useSetBusy,
@@ -9,11 +6,17 @@ import {
 } from '../custom-hooks/authorize-provider';
 import Person from '../models/entities/Person';
 import { insertAttendance } from '../repositories/attendance-queries';
-import { scanEventQRCode } from '../repositories/event-queries';
+import {
+  getScannerLogCount,
+  scanEventQRCode,
+} from '../repositories/event-queries';
 import { scanPersonQRCode } from '../repositories/person-queries';
 import { SystemModules } from '../routes';
 import { userProfileActions } from '../state/reducers/user-profile-reducer';
+import { RootState } from '../state/store';
 import QRCodeReader from './modals/qrcode-reader';
+import MainScanner from './scanner-component/main-scanner';
+import PersonVerifier from './scanner-component/person-verifier';
 
 export default function Dashboard() {
   const userProfileState = useSelector((state: RootState) => state.userProfile);
@@ -23,12 +26,26 @@ export default function Dashboard() {
   const dispatch = useDispatch();
   const setBusy = useSetBusy();
   const setToasterMessage = useSetToasterMessage();
+
+  async function fetchScannerLogCount(eventId: number) {
+    setBusy(true);
+    await getScannerLogCount(userProfileState.systemUser?.id ?? 0, eventId)
+      .then((res) => {
+        if (res) {
+          console.log(res);
+          dispatch(userProfileActions.setScannerLogCount(res));
+        }
+      })
+      .catch((err) => setToasterMessage({ content: err.message }))
+      .finally(() => setBusy(false));
+  }
   async function onQRRead(qrCode: string) {
     setBusy(true);
     if (userProfileState.eventId === 0) {
       await scanEventQRCode(qrCode)
-        .then((res) => {
+        .then(async (res) => {
           if (res) {
+            await fetchScannerLogCount(res.id);
             dispatch(userProfileActions.setEvent(res));
             window.location.href = SystemModules.Scanner;
           }

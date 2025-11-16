@@ -17,6 +17,8 @@ export const EventApproverEnd = {
 export const EventEnd = {
   ScanQRCode: 'events/qr',
   ScanPersonQRCode: 'events/person/qr',
+  PrintStub: 'events/print-stub',
+  GetScannerLogCount: 'events/scanner-log-count',
 };
 export const GenderEnd = {
   GetList: 'genders',
@@ -54,4 +56,9 @@ export const IdentificationTypeEnd = {
 
 export const AttendanceEnd = {
   Insert: 'attendances',
+};
+
+export const StubEnd = {
+  Claim: 'stubs/claim',
+  ScanQRCode: 'stubs/qr',
 };

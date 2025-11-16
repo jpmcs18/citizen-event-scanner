@@ -4,18 +4,23 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
-import { toDateMMM_dd_yyyy, toMMMdd_hhtt } from '../../helper';
-import { scannerActions } from '../../state/reducers/scanner-reducer';
-import { RootState } from '../../state/store';
-import errorLogo from '../../icons/error_.png';
-import CustomDropdown from '../components/custom-dropdown';
 import { offices } from '../../constant';
+import { useSetBusy } from '../../custom-hooks/authorize-provider';
+import { toDateMMM_dd_yyyy, toMMMdd_hhtt } from '../../helper';
+import errorLogo from '../../icons/error_.png';
+import { printStub } from '../../repositories/event-queries';
+import { scannerActions } from '../../state/reducers/scanner-reducer';
+import { stubViewerActions } from '../../state/reducers/stub-viewer-reducer';
+import { RootState } from '../../state/store';
+import CustomDropdown from '../components/custom-dropdown';
 import CustomTextArea from '../components/custom-textarea';
+import StubViewerModal from '../modals/stub-viewer-modal';
 export default function PersonScanConfirmation() {
+  const stubViewerState = useSelector((state: RootState) => state.stubViewer);
   const scannerState = useSelector((state: RootState) => state.scanner);
   const userProfileState = useSelector((state: RootState) => state.userProfile);
   const dispatch = useDispatch();
-
+  const setBusy = useSetBusy();
   function confirm() {
     if (scannerState.hasRepresentative) dispatch(scannerActions.setScreen(4));
     else dispatch(scannerActions.setScreen(6));
@@ -25,6 +30,20 @@ export default function PersonScanConfirmation() {
   }
   function cancel() {
     dispatch(scannerActions.setScreen(1));
+  }
+  async function printClaimStub() {
+    setBusy(true);
+    await printStub(scannerState.person?.eventClaimId ?? 0)
+      .then((res) => {
+        dispatch(stubViewerActions.setStub(res));
+        dispatch(stubViewerActions.setAutoPrint(true));
+        dispatch(stubViewerActions.setShowModal(true));
+      })
+      .catch((err) => {
+        dispatch(scannerActions.setError(err.message));
+        dispatch(scannerActions.setScreen(8));
+      })
+      .finally(() => setBusy(false));
   }
   return (
     <div className='container'>
@@ -168,9 +187,17 @@ export default function PersonScanConfirmation() {
           </button>
         )
       )}
+      {userProfileState.systemUser?.allowReprintStub &&
+        scannerState.isClaim &&
+        scannerState.person?.isClaimScanned && (
+          <button className='btn color-green' onClick={printClaimStub}>
+            Reprint Stub
+          </button>
+        )}
       <button className='btn btn-cancel' onClick={cancel}>
         Cancel
       </button>
+      <>{stubViewerState.isModalShow && <StubViewerModal />}</>
     </div>
   );
 }

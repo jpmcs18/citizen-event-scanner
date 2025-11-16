@@ -11,6 +11,9 @@ import RepresentativeDisplay from './scanner-component/representative-display';
 import ScannerMainDisplay from './scanner-component/scanner-main-display';
 import SuccessScan from './scanner-component/success-scan';
 import CaptureSignature from './scanner-component/capture-signature';
+import StubViewer from './scanner-component/stub-viewer';
+import StubConfirmation from './scanner-component/stub-confirmation';
+import StubSucessScan from './scanner-component/stub-success-scan';
 
 export default function ScannerPage() {
   const scannerState = useSelector((state: RootState) => state.scanner);
@@ -25,6 +28,7 @@ export default function ScannerPage() {
     //eslint-disable-next-line
     []
   );
+
   return (
     <div className='body-content'>
       {scannerState.screen === 1 && <ScannerMainDisplay />}
@@ -36,6 +40,9 @@ export default function ScannerPage() {
       {scannerState.screen === 7 && <SuccessScan />}
       {scannerState.screen === 8 && <ErrorScan />}
       {scannerState.screen === 9 && <CaptureSignature />}
+      {scannerState.screen === 10 && <StubViewer />}
+      {scannerState.screen === 11 && <StubConfirmation />}
+      {scannerState.screen === 12 && <StubSucessScan />}
       {/* {scannerState.screen === 8 && <NoAppointmentError />}
       {scannerState.screen === 9 && <UnconfirmedFamilyError />}
       {scannerState.screen === 10 && <BarangayNotScheduled />} */}

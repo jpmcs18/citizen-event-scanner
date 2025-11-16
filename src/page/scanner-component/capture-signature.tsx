@@ -1,23 +1,17 @@
-import React, { useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import SignatureCanvas from 'react-signature-canvas';
-import Webcam from 'react-webcam';
-import {
-  useSetBusy,
-  useSetToasterMessage,
-} from '../../custom-hooks/authorize-provider';
-import { saveAttendance } from '../../repositories/event-attendance-queries';
+import { useSetBusy } from '../../custom-hooks/authorize-provider';
 import { saveClaim } from '../../repositories/event-claim-queries';
 import { scannerActions } from '../../state/reducers/scanner-reducer';
+import { stubViewerActions } from '../../state/reducers/stub-viewer-reducer';
 import { RootState } from '../../state/store';
-import { resizeBase64Image } from '../../helper';
 
 export default function CaptureSignature() {
   const scannerState = useSelector((state: RootState) => state.scanner);
   const userProfileState = useSelector((state: RootState) => state.userProfile);
   const dispatch = useDispatch();
   const setBusy = useSetBusy();
-  const setToasterMessage = useSetToasterMessage();
   const signRef = useRef<any>(null);
 
   async function save() {
@@ -48,12 +42,17 @@ export default function CaptureSignature() {
       )
         .then((res) => {
           if (res) {
-            dispatch(scannerActions.setScreen(7));
+            dispatch(stubViewerActions.setStub(res));
+            dispatch(scannerActions.setScreen(10));
           } else {
-            setToasterMessage({ content: 'Unable to save claim' });
+            dispatch(scannerActions.setError('Unable to save claim'));
+            dispatch(scannerActions.setScreen(8));
           }
         })
-        .catch((err) => setToasterMessage({ content: err.message }))
+        .catch((err) => {
+          dispatch(scannerActions.setError(err.message));
+          dispatch(scannerActions.setScreen(8));
+        })
         .finally(() => setBusy(false));
     }
   }

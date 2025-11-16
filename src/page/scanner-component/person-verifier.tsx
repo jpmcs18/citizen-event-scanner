@@ -16,7 +16,7 @@ export default function PersonVerifier() {
   }
 
   return (
-    <>
+    <div className='container'>
       {userProfileState.person ? (
         <>
           <FontAwesomeIcon className='icon-success' icon={faCheck} />
@@ -58,15 +58,13 @@ export default function PersonVerifier() {
       <button className='btn btn-green' onClick={onContinue}>
         Continue
       </button>
-      {userProfileState.eventId === 2 && (
-        <button
-          className='btn btn-green'
-          onClick={() => {
-            dispatch(qrcodeReaderActions.setShowModal(true));
-          }}>
-          Scan QR Code
-        </button>
-      )}
-    </>
+      <button
+        className='btn btn-green'
+        onClick={() => {
+          dispatch(qrcodeReaderActions.setShowModal(true));
+        }}>
+        Scan QR Code
+      </button>
+    </div>
   );
 }

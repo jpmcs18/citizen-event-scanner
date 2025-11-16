@@ -156,6 +156,14 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.bg-red {
+  background-color: var(--red-color);
+}
+
+.bg-green {
+  background-color: var(--green-color);
+}
+
 .error-scan,
 .success-scan {
   height: 100dvh;
@@ -245,7 +253,8 @@
 }
 .main-body-container .body-content .main-display-text {
   margin: 1.5em;
-  font-weight: var(--demibold);
+  font-size: 2rem;
+  font-weight: var(--bold);
   text-align: center;
 }
 .main-body-container .body-content .main-display-text .icon-logo {
@@ -443,6 +452,13 @@ section {
   left: 0;
   right: 0;
   text-align: center;
+}
+
+.selfie-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .search-main-container {
@@ -1074,6 +1090,43 @@ input:disabled {
   color: var(--color);
 }
 
+.stub-content {
+  padding: 1em;
+  width: 20em;
+  padding-bottom: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.stub-content .main-logo img {
+  width: 7em;
+}
+.stub-content .title {
+  font-weight: bold;
+  text-align: center;
+  font-size: 2rem;
+  margin: 0.5em;
+}
+.stub-content .text {
+  width: 18em;
+  font-weight: var(--demibold);
+  text-align: center;
+}
+.stub-content .stub {
+  margin: 1em;
+  position: relative;
+  z-index: 1;
+  width: 13em;
+  height: 5em;
+}
+.stub-content .stub img {
+  position: absolute;
+  z-index: 2;
+  border-radius: 1em;
+  width: 13em;
+}
+
 .pagination .pages-container {
   position: relative;
   z-index: 2;
@@ -1598,6 +1651,105 @@ fieldset legend {
   left: 0;
   right: 0;
   bottom: 0;
+}
+.modal-container .barcode-reader-modal {
+  overflow-y: auto !important;
+  height: 100dvh;
+  width: 100dvw;
+}
+.modal-container .barcode-reader-modal .modal-content-header {
+  display: flex;
+  padding: 0 !important;
+  flex-direction: column-reverse;
+}
+.modal-container .barcode-reader-modal .modal-content-header .header-text {
+  background-color: rgb(16, 16, 197);
+  clear: both;
+  text-align: center !important;
+  width: 100%;
+  padding: 0.5em;
+  color: white !important;
+}
+.modal-container .barcode-reader-modal .modal-content-header .close-icon {
+  align-self: flex-end;
+  margin: 0.5em !important;
+}
+.modal-container .barcode-reader-modal .barcode-reader-modal-body {
+  display: flex;
+  justify-content: center;
+}
+@media screen and (min-width: 721px) {
+  .modal-container .barcode-reader-modal .barcode-reader-modal-body {
+    flex-direction: row;
+  }
+  .modal-container .barcode-reader-modal .barcode-reader-modal-body .stub-container {
+    width: 30dvw;
+  }
+}
+@media screen and (max-width: 720px) {
+  .modal-container .barcode-reader-modal .barcode-reader-modal-body {
+    flex-direction: column;
+  }
+  .modal-container .barcode-reader-modal .barcode-reader-modal-body .stub-container {
+    width: 80dvw;
+  }
+}
+.modal-container .barcode-reader-modal .barcode-reader-modal-body .scanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.modal-container .barcode-reader-modal .barcode-reader-modal-body .scanner .scanner-main-container {
+  width: max(30dvw, 30dvh);
+}
+.modal-container .barcode-reader-modal .barcode-reader-modal-body .scanner .qrcode-reader-sub-title {
+  font-size: var(--sub-header-font-size);
+  text-align: center;
+  font-weight: var(--demibold);
+}
+.modal-container .barcode-reader-modal .barcode-reader-modal-body .scanner .status {
+  color: white;
+  width: 100%;
+  text-align: center;
+  padding: 0.2em;
+}
+.modal-container .barcode-reader-modal .barcode-reader-modal-body .scanner .image {
+  box-shadow: 0em 0em 0.5em var(--shadow-color);
+  border: 0.01em solid black;
+  margin: 1em;
+  width: 70%;
+  aspect-ratio: 1;
+}
+.modal-container .barcode-reader-modal .barcode-reader-modal-body .scanner .text {
+  text-align: left;
+  align-self: flex-start;
+}
+.modal-container .barcode-reader-modal .barcode-reader-modal-body .scanner .barcode-scanner-main-container {
+  width: 100%;
+  margin: 1em 0em;
+  height: 5em;
+  border-radius: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-container .barcode-reader-modal .barcode-reader-modal-body .scanner .barcode-scanner-main-container .scanner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2em;
+  box-sizing: border-box;
+  position: relative;
+}
+.modal-container .barcode-reader-modal .barcode-reader-modal-body .scanner .barcode-scanner-main-container .scanner-container input {
+  position: absolute;
+}
+.modal-container .barcode-reader-modal .barcode-reader-modal-body .scanner .barcode-scanner-main-container .scanner-container .scanning-status {
+  text-align: center;
+  color: white;
+  font-weight: var(--bold);
+  font-size: var(--sub-header-font-size);
 }
 .modal-container .qrcode-reader-modal {
   width: min(90dvw, 90dvh);

@@ -13,7 +13,7 @@ interface State {
   approvedId: number | undefined;
   hasRepresentative: boolean;
   representative: Person | undefined;
-  error: string | undefined;
+  error: any | undefined;
   subError: string | undefined;
   officeId: number | undefined;
   purpose: string | undefined;

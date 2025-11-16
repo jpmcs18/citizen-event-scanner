@@ -1,4 +1,5 @@
 import { EventClaimEnd } from '../endpoints';
+import Stub from '../models/entities/Stub';
 import { httpPost } from './base';
 
 export async function saveClaim(
@@ -8,7 +9,7 @@ export async function saveClaim(
   sign: string,
   approverId: number | undefined,
   representedBy: number | undefined
-): Promise<boolean | undefined> {
+): Promise<Stub | undefined> {
   return await httpPost(EventClaimEnd.Save, {
     personId,
     eventId,

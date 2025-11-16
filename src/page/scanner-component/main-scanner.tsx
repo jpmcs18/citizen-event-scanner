@@ -38,15 +38,21 @@ export default function MainScanner() {
           }
         />
       </div>
-      <button className='btn' onClick={() => scanQRCode(0)}>
-        Scan the Event QR Code
-      </button>
-      <button className='btn' onClick={() => scanQRCode(1)}>
-        Scan QR Code for Verification
-      </button>
-      <button className='btn' onClick={() => scanQRCode(2)}>
-        Scan QR Code for Attendance
-      </button>
+      {userProfileState.systemUser?.allowScanner && (
+        <button className='btn' onClick={() => scanQRCode(0)}>
+          Scan the Event QR Code
+        </button>
+      )}
+      {userProfileState.systemUser?.allowVerificationScanner && (
+        <button className='btn' onClick={() => scanQRCode(1)}>
+          Scan QR Code for Verification
+        </button>
+      )}
+      {userProfileState.systemUser?.allowAttendanceScanner && (
+        <button className='btn' onClick={() => scanQRCode(2)}>
+          Scan QR Code for Attendance
+        </button>
+      )}
     </div>
   );
 }

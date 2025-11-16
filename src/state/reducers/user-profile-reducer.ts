@@ -6,10 +6,12 @@ import TokenData from '../../models/entities/TokenData';
 import {
   clearSession,
   clearSessionEvent,
+  getScanLog,
   getScanner,
   getSessionEvent,
   getSessionProfile,
   getToken,
+  saveScanLog,
   saveScanner,
   saveSessionEvent,
   saveSessionProfile,
@@ -23,7 +25,9 @@ interface State {
   person: Person | undefined;
   screen: number;
   isScanner: boolean;
+  isStubScanner: boolean;
   eventId: number;
+  scannerLogCount: number;
 }
 
 const initialState: State = {
@@ -34,7 +38,9 @@ const initialState: State = {
   person: undefined,
   screen: 1,
   isScanner: false,
+  isStubScanner: false,
   eventId: 0,
+  scannerLogCount: 0,
 };
 
 const userProfileSlice = createSlice({
@@ -49,6 +55,7 @@ const userProfileSlice = createSlice({
         state.systemUser = getSessionProfile();
         state.event = getSessionEvent();
         state.isScanner = getScanner();
+        state.scannerLogCount = +(getScanLog() ?? 0);
         isClearSession = state.systemUser === undefined;
       }
 
@@ -57,8 +64,13 @@ const userProfileSlice = createSlice({
         state.authorize = false;
         state.event = undefined;
         state.eventId = 0;
+        state.isStubScanner = false;
+        state.scannerLogCount = 0;
         clearSession();
       }
+    },
+    setIsStubScanner(state, action: PayloadAction<boolean>) {
+      state.isStubScanner = action.payload;
     },
     setEventId(state, action: PayloadAction<number>) {
       state.eventId = action.payload;
@@ -78,6 +90,7 @@ const userProfileSlice = createSlice({
         state.event = undefined;
         state.eventId = 0;
         state.isScanner = false;
+        state.scannerLogCount = 0;
         clearSession();
       }
     },
@@ -101,6 +114,10 @@ const userProfileSlice = createSlice({
     },
     setScreen(state, action: PayloadAction<number>) {
       state.screen = action.payload;
+    },
+    setScannerLogCount(state, action: PayloadAction<number>) {
+      state.scannerLogCount = action.payload;
+      saveScanLog(action.payload.toString()!);
     },
     clearEvent(state) {
       state.event = undefined;

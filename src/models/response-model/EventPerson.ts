@@ -21,4 +21,5 @@ export default interface EventPerson {
   claimDate: Date | undefined;
   isScheduledBarangay: boolean | undefined;
   hasIn: boolean | undefined;
+  eventClaimId: number | undefined;
 }

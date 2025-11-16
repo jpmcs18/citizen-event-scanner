@@ -10,6 +10,12 @@ export default interface SystemUser {
   employeeId: number | undefined;
   userTypeId: number | undefined;
   allowScanner: boolean | undefined;
+
+  allowScanClaim: boolean | undefined;
+  allowReprintStub: boolean | undefined;
+  allowScanAttendance: boolean | undefined;
+  allowScanStub: boolean | undefined;
+
   allowVerificationScanner: boolean | undefined;
   allowAttendanceScanner: boolean | undefined;
   userType?: SystemUserType;

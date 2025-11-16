@@ -9,8 +9,8 @@ export default function Modal({
   children,
   isCloseBack,
 }: {
-  title?: String | undefined;
-  className?: String | undefined;
+  title?: string | undefined;
+  className?: string | undefined;
   onClose?: (() => void) | undefined;
   children: ReactNode;
   isCloseBack?: boolean;

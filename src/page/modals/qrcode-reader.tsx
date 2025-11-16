@@ -60,27 +60,31 @@ export default function QRCodeReader({
       onClose={() => dispatch(qrcodeReaderActions.setShowModal(false))}>
       <div className='qrcode-reader-modal-body'>
         {userProfileState.isScanner ? (
-          <div className='mobile-scanner'>
-            <QrScanner
-              onDecode={(result) => {
-                onClose(result);
-                dispatch(qrcodeReaderActions.setShowModal(false));
-              }}
-              onError={() => {}}
-            />
-          </div>
+          <>
+            <div className='mobile-scanner'>
+              <QrScanner
+                onDecode={(result) => {
+                  onClose(result);
+                  dispatch(qrcodeReaderActions.setShowModal(false));
+                }}
+                onError={() => {}}
+              />
+            </div>
+
+            {userProfileState.isScanner && (
+              <h2 className='qrcode-reader-sub-title'>
+                Place QR Code within the box
+              </h2>
+            )}
+          </>
         ) : (
           <Scanner
+            scannerType='QRCode'
             onRead={(result) => {
               onClose(result);
               dispatch(qrcodeReaderActions.setShowModal(false));
             }}
           />
-        )}
-        {userProfileState.isScanner && (
-          <h2 className='qrcode-reader-sub-title'>
-            Place QR Code within the box
-          </h2>
         )}
         <h2 className='qrcode-reader-sub-title bold text-red'>{title}</h2>
 

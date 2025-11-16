@@ -1,4 +1,6 @@
+import jsPDF from 'jspdf';
 import printJS from 'print-js';
+
 const longMonths = [
   'January',
   'February',
@@ -41,6 +43,40 @@ export function validateFileSize(selectedFile: File | undefined) {
   }
 }
 
+export function printImage(
+  image: string,
+  height: number = 1013,
+  width: number = 638
+) {
+  const doc = new jsPDF('p', 'px', [width, height]);
+  doc.addImage(
+    image.replace('data:image/png;base64,', ''),
+    'PNG',
+    0,
+    0,
+    width,
+    height
+  );
+  doc.autoPrint();
+  window.open(doc.output('bloburl'), '_blank')?.print();
+}
+export function printFile(url: any) {
+  const iframe = document.createElement('iframe');
+  iframe.style.display = 'none'; // Hide the iframe
+  iframe.src = url;
+
+  // Append the iframe to the document body
+  document.body.appendChild(iframe);
+
+  // Wait for the iframe to load and trigger print
+  iframe.onload = () => {
+    iframe.contentWindow?.print();
+
+    // Clean up after printing
+    // document.body.removeChild(iframe);
+    URL.revokeObjectURL(url);
+  };
+}
 export function downloadFile(file: string, fileName: string) {
   let link = document.createElement('a');
   link.href = file;
@@ -234,6 +270,20 @@ export function toMMMdd_hhtt(date?: Date | null): string {
     .toString()
     .padStart(2, '0')} - ${hours.toString().padStart(2, '0')} ${ampm}`;
 }
+
+export function toMMMdd_at_hhmm_tt(date?: Date | null): string {
+  if (date === undefined || date === null) return '';
+  const d = new Date(date);
+  const hours = d.getHours() > 12 ? d.getHours() - 12 : d.getHours();
+  const minutes = d.getMinutes();
+  const ampm = d.getHours() > 11 ? 'PM' : 'AM';
+  return `${shortMonths[d.getMonth()]}. ${d
+    .getDate()
+    .toString()
+    .padStart(2, '0')} @ ${hours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')} ${ampm}`;
+}
 export function to12HoursDateTimeDisplay(date?: Date | null): string {
   if (date === undefined || date === null) return '';
   const d = new Date(date);
@@ -318,9 +368,12 @@ export function validateDate(date: Date | undefined): boolean {
   );
 }
 
-export function printPDFReport(report: string) {
+export function printPDFReport(report: any) {
   printJS({
-    printable: report.replace('data:application/pdf;base64,', ''),
+    printable: report.replace(
+      ['data:application/pdf;base64,', 'data:image/png;base64,'],
+      ''
+    ),
     type: 'pdf',
     base64: true,
   });

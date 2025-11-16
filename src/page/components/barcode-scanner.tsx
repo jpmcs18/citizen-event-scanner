@@ -1,16 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import qrLogo from '../../icons/qrcode.png';
-import barcodeLogo from '../../icons/barcode_2.png';
-export default function Scanner({
+import { useEffect, useRef, useState } from 'react';
+export default function BarcodeScanner({
   onRead,
-  scannerType,
 }: {
   onRead: (qrCode: string) => void;
-  scannerType: 'QRCode' | 'Barcode';
 }) {
   const [typing, setTyping] = useState(false);
   const [value, setValue] = useState('');
   const txtRef = useRef<HTMLInputElement>(null);
+  const [hasFocus, setHasFocus] = useState(false);
   useEffect(
     () => {
       const timeout = setTimeout(() => {
@@ -35,17 +32,23 @@ export default function Scanner({
 
   function focusOnScanner() {
     const timeout = setTimeout(() => {
-      if (txtRef.current) txtRef.current.focus();
+      if (txtRef.current) {
+        txtRef.current.focus();
+        setHasFocus((x) => true);
+      }
       clearTimeout(timeout);
     }, 100);
   }
   return (
     <div
-      id='scanner-main-container'
-      className='scanner-main-container'
+      id='barcode-scanner-main-container'
+      className={
+        'barcode-scanner-main-container ' + (hasFocus ? 'bg-green' : 'bg-red')
+      }
       onClick={focusOnScanner}>
       <div className='scanner-container'>
         <input
+          onBlur={() => setHasFocus((x) => false)}
           style={{ opacity: '0' }}
           type='text'
           value={value}
@@ -61,15 +64,13 @@ export default function Scanner({
             setValue(e.target.value);
           }}
         />
-        <div className='scanner-content'>
-          <div className='image-container'>
-            {scannerType === 'QRCode' && <img src={qrLogo} alt='QRCode' />}
-            {scannerType === 'Barcode' && (
-              <img src={barcodeLogo} alt='Barcode' />
-            )}
+        {hasFocus ? (
+          <div className='scanning-status'>Barcode scanner is active</div>
+        ) : (
+          <div className='scanning-status'>
+            Clich here to activate barcode scanner
           </div>
-          <div className='scanner'></div>
-        </div>
+        )}
       </div>
     </div>
   );
