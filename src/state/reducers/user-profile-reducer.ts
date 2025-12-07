@@ -6,11 +6,13 @@ import TokenData from '../../models/entities/TokenData';
 import {
   clearSession,
   clearSessionEvent,
+  getInventory,
   getScanLog,
   getScanner,
   getSessionEvent,
   getSessionProfile,
   getToken,
+  saveInventory,
   saveScanLog,
   saveScanner,
   saveSessionEvent,
@@ -28,6 +30,7 @@ interface State {
   isStubScanner: boolean;
   eventId: number;
   scannerLogCount: number;
+  remainingInventory: number;
 }
 
 const initialState: State = {
@@ -41,6 +44,7 @@ const initialState: State = {
   isStubScanner: false,
   eventId: 0,
   scannerLogCount: 0,
+  remainingInventory: 0,
 };
 
 const userProfileSlice = createSlice({
@@ -56,6 +60,7 @@ const userProfileSlice = createSlice({
         state.event = getSessionEvent();
         state.isScanner = getScanner();
         state.scannerLogCount = +(getScanLog() ?? 0);
+        state.remainingInventory = +(getInventory() ?? 0);
         isClearSession = state.systemUser === undefined;
       }
 
@@ -66,6 +71,7 @@ const userProfileSlice = createSlice({
         state.eventId = 0;
         state.isStubScanner = false;
         state.scannerLogCount = 0;
+        state.remainingInventory = 0;
         clearSession();
       }
     },
@@ -118,6 +124,10 @@ const userProfileSlice = createSlice({
     setScannerLogCount(state, action: PayloadAction<number>) {
       state.scannerLogCount = action.payload;
       saveScanLog(action.payload.toString()!);
+    },
+    setRemainingInventory(state, action: PayloadAction<number>) {
+      state.remainingInventory = action.payload;
+      saveInventory(action.payload.toString()!);
     },
     clearEvent(state) {
       state.event = undefined;

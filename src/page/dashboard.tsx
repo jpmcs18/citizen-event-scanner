@@ -17,6 +17,7 @@ import { RootState } from '../state/store';
 import QRCodeReader from './modals/qrcode-reader';
 import MainScanner from './scanner-component/main-scanner';
 import PersonVerifier from './scanner-component/person-verifier';
+import { getRemainingInventory } from '../repositories/event-inventory-queries';
 
 export default function Dashboard() {
   const userProfileState = useSelector((state: RootState) => state.userProfile);
@@ -31,10 +32,19 @@ export default function Dashboard() {
     setBusy(true);
     await getScannerLogCount(userProfileState.systemUser?.id ?? 0, eventId)
       .then((res) => {
-        if (res) {
-          console.log(res);
-          dispatch(userProfileActions.setScannerLogCount(res));
-        }
+        console.log(res);
+        dispatch(userProfileActions.setScannerLogCount(res ?? 0));
+      })
+      .catch((err) => setToasterMessage({ content: err.message }))
+      .finally(() => setBusy(false));
+  }
+
+  async function fetchRemainingInventory(eventId: number) {
+    setBusy(true);
+    await getRemainingInventory(userProfileState.systemUser?.id ?? 0, eventId)
+      .then((res) => {
+        console.log(res);
+        dispatch(userProfileActions.setRemainingInventory(res ?? 0));
       })
       .catch((err) => setToasterMessage({ content: err.message }))
       .finally(() => setBusy(false));
@@ -46,6 +56,7 @@ export default function Dashboard() {
         .then(async (res) => {
           if (res) {
             await fetchScannerLogCount(res.id);
+            await fetchRemainingInventory(res.id);
             dispatch(userProfileActions.setEvent(res));
             window.location.href = SystemModules.Scanner;
           }

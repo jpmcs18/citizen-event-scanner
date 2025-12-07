@@ -360,6 +360,14 @@ body {
   font-weight: var(--bold) !important;
 }
 
+.mar-1 {
+  margin: 1em;
+}
+
+.mar-ud-1 {
+  margin: 1em 0em;
+}
+
 .table-container {
   margin: 0.5em;
   overflow: auto;

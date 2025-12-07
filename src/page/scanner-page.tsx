@@ -14,16 +14,39 @@ import CaptureSignature from './scanner-component/capture-signature';
 import StubViewer from './scanner-component/stub-viewer';
 import StubConfirmation from './scanner-component/stub-confirmation';
 import StubSucessScan from './scanner-component/stub-success-scan';
+import { signalRService } from '../services/signalr-service';
+import { userProfileActions } from '../state/reducers/user-profile-reducer';
+import { useDispatch } from 'react-redux';
 
 export default function ScannerPage() {
   const scannerState = useSelector((state: RootState) => state.scanner);
   const userProfileState = useSelector((state: RootState) => state.userProfile);
-
+  const dispatch = useDispatch();
   useEffect(
     () => {
       if (!userProfileState.event) {
         window.location.href = SystemModules.Home;
       }
+
+      const startConnection = async () => {
+        await signalRService.start();
+
+        await signalRService.register(
+          userProfileState.systemUser?.id.toString() ?? ''
+        );
+        // Listen to messages
+        signalRService.onNewInventory((message) => {
+          console.log(message);
+          dispatch(userProfileActions.setRemainingInventory(+message));
+        });
+        // Listen to messages
+        signalRService.onNewScanCount((message) => {
+          console.log(message);
+          dispatch(userProfileActions.setScannerLogCount(+message));
+        });
+      };
+
+      startConnection();
     },
     //eslint-disable-next-line
     []

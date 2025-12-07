@@ -14,6 +14,9 @@ export const SystemUserEnd = {
 export const EventApproverEnd = {
   Validate: 'event-approvers/validate',
 };
+export const EventInventoryEnd = {
+  GetRemainingInventory: 'event-inventory/inventory',
+};
 export const EventEnd = {
   ScanQRCode: 'events/qr',
   ScanPersonQRCode: 'events/person/qr',
@@ -49,7 +52,6 @@ export const RoleEnd = {
 export const SexEnd = {
   GetList: 'sexes',
 };
-
 export const IdentificationTypeEnd = {
   GetList: 'identification-types',
 };
@@ -62,3 +64,5 @@ export const StubEnd = {
   Claim: 'stubs/claim',
   ScanQRCode: 'stubs/qr',
 };
+
+export const SignalRHub = 'hub/navo';

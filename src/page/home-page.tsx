@@ -1,15 +1,14 @@
-import { useSelector } from 'react-redux';
+import { faHome, faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { useSetMessage } from '../custom-hooks/authorize-provider';
 import { SystemModules } from '../routes';
+import { signalRService } from '../services/signalr-service';
+import { userProfileActions } from '../state/reducers/user-profile-reducer';
 import { RootState } from '../state/store';
 import Dashboard from './dashboard';
 import LoginPage from './login-page';
-import logo from '../icons/Main Logo.png';
-import { useDispatch } from 'react-redux';
-import { useSetMessage } from '../custom-hooks/authorize-provider';
-import { userProfileActions } from '../state/reducers/user-profile-reducer';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import ScannerPage from './scanner-page';
 export default function HomePage() {
   const userProfileState = useSelector((state: RootState) => state.userProfile);
@@ -19,13 +18,20 @@ export default function HomePage() {
     setMessage({
       message: 'Continue to logout?',
       action: 'YESNO',
-      onOk: () => {
+      onOk: async () => {
+        await signalRService.unregister(
+          userProfileState.systemUser?.id.toString() ?? ''
+        );
         dispatch(userProfileActions.clearProfile());
       },
     });
   }
-  function gotoHome() {
+  async function gotoHome() {
     dispatch(userProfileActions.clearEvent());
+
+    await signalRService.unregister(
+      userProfileState.systemUser?.id.toString() ?? ''
+    );
     window.location.href = SystemModules.Dashboard;
   }
   return (
@@ -34,12 +40,12 @@ export default function HomePage() {
         <div></div>
       ) : userProfileState.authorize ? (
         <div className='main-body-container'>
-          <div className='main-header'>
+          {/* <div className='main-header'>
             <div className='main-logo'>
               <img src={logo} alt='Main' />
             </div>
             <div className='main-logo-text'>Event Scanner</div>
-          </div>
+          </div> */}
           <BrowserRouter>
             <Routes>
               <Route
@@ -60,7 +66,7 @@ export default function HomePage() {
                 <button
                   className='btn-tool btn-home'
                   onClick={gotoHome}
-                  title='Logout'>
+                  title='Home'>
                   <FontAwesomeIcon icon={faHome} />
                 </button>
               )}

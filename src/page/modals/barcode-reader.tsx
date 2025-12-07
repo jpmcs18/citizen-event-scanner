@@ -24,13 +24,6 @@ export default function BarcodeReader({ title }: { title?: string }) {
       .then(async (res) => {
         if (res) {
           dispatch(stubActions.setStub(res));
-          if (!res.isClaimed) {
-            dispatch(
-              userProfileActions.setScannerLogCount(
-                userProfileState.scannerLogCount + 1
-              )
-            );
-          }
         } else {
           setToasterMessage({ content: 'Invalid Stub' });
         }
@@ -43,11 +36,15 @@ export default function BarcodeReader({ title }: { title?: string }) {
 
   return (
     <Modal
-      title={`TOTAL STUB SCANNED: ${userProfileState.scannerLogCount}`}
+      title={`TOTAL STUB SCANNED: ${userProfileState.scannerLogCount?.toLocaleString()}`}
       className='barcode-reader-modal'
       onClose={() => dispatch(barcodeReaderActions.setShowModal(false))}>
       <div className='barcode-reader-modal-body'>
         <div className='scanner'>
+          <div className='text-red bold mar-ud-1'>
+            REMAINING INVENTORY:&nbsp;
+            {userProfileState.remainingInventory?.toLocaleString()}
+          </div>
           <div className='qrcode-reader-sub-title'>
             {userProfileState.event?.description} STUB
           </div>
