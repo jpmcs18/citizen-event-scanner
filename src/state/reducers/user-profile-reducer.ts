@@ -31,6 +31,7 @@ interface State {
   eventId: number;
   scannerLogCount: number;
   remainingInventory: number;
+  isAlreadyScanned: boolean;
 }
 
 const initialState: State = {
@@ -45,6 +46,7 @@ const initialState: State = {
   eventId: 0,
   scannerLogCount: 0,
   remainingInventory: 0,
+  isAlreadyScanned: false,
 };
 
 const userProfileSlice = createSlice({
@@ -128,6 +130,9 @@ const userProfileSlice = createSlice({
     setRemainingInventory(state, action: PayloadAction<number>) {
       state.remainingInventory = action.payload;
       saveInventory(action.payload.toString()!);
+    },
+    setIsAlreadyScanned(state, action: PayloadAction<boolean>) {
+      state.isAlreadyScanned = action.payload;
     },
     clearEvent(state) {
       state.event = undefined;

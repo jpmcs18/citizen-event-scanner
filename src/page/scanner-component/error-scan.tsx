@@ -13,7 +13,7 @@ export default function ErrorScan() {
     () => {
       if (+scannerState.error.status === 400) {
         Object.keys(scannerState.error.errors).forEach((key) =>
-          setErrors((x) => [...x, ...scannerState.error.errors[key]])
+          setErrors((x) => [...x, ...scannerState.error.errors[key]]),
         );
       } else {
         if (scannerState.error.message === 'Unauthorized') {
@@ -23,7 +23,7 @@ export default function ErrorScan() {
       }
     },
     //eslint-disable-next-line
-    [scannerState.error]
+    [scannerState.error],
   );
   return (
     <div className='error-scan'>
@@ -38,7 +38,13 @@ export default function ErrorScan() {
       )}
       <button
         className='btn color-green'
-        onClick={() => dispatch(scannerActions.setScreen(1))}>
+        onClick={() => {
+          if (errors.some((x) => x === 'Unauthorized')) {
+            dispatch(userProfileActions.clearProfile());
+            return;
+          }
+          dispatch(scannerActions.setScreen(1));
+        }}>
         CONTINUE
       </button>
     </div>

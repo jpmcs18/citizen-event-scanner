@@ -12,6 +12,9 @@ import { RootState } from '../../state/store';
 import BarcodeScanner from '../components/barcode-scanner';
 import Modal from './modal';
 
+import error from '../../icons/error_.png';
+import check from '../../icons/success_icon.png';
+
 export default function BarcodeReader({ title }: { title?: string }) {
   const dispatch = useDispatch();
   const setBusy = useSetBusy();
@@ -20,10 +23,17 @@ export default function BarcodeReader({ title }: { title?: string }) {
   const stubState = useSelector((state: RootState) => state.stub);
   async function onStubRead(code: string) {
     setBusy(true);
-    await scanStubQRCode(code)
+    await scanStubQRCode(code, userProfileState.event?.id!)
       .then(async (res) => {
         if (res) {
-          dispatch(stubActions.setStub(res));
+          dispatch(stubActions.setStub(res.stub));
+          if (!res.alreadyScan) {
+            dispatch(
+              userProfileActions.setRemainingInventory(res.remainingInventory)
+            );
+            dispatch(userProfileActions.setScannerLogCount(res.totalScan));
+          }
+          dispatch(userProfileActions.setIsAlreadyScanned(res.alreadyScan));
         } else {
           setToasterMessage({ content: 'Invalid Stub' });
         }
@@ -41,13 +51,30 @@ export default function BarcodeReader({ title }: { title?: string }) {
       onClose={() => dispatch(barcodeReaderActions.setShowModal(false))}>
       <div className='barcode-reader-modal-body'>
         <div className='scanner'>
-          <div className='text-red bold mar-ud-1'>
+          <div className='text-red bold'>
             REMAINING INVENTORY:&nbsp;
             {userProfileState.remainingInventory?.toLocaleString()}
           </div>
-          <div className='qrcode-reader-sub-title'>
-            {userProfileState.event?.description} STUB
-          </div>
+          {userProfileState.isAlreadyScanned ? (
+            <>
+              <img className='icon' src={error} alt='error' />
+              <div className='status bg-red qrcode-reader-sub-title'>
+                ALREADY SCANNED
+              </div>
+            </>
+          ) : (
+            <>
+              <img className='icon' src={check} alt='Approve' />
+              <div className='status bg-green qrcode-reader-sub-title'>
+                SCANNED
+              </div>
+            </>
+          )}
+          <img
+            className='image'
+            src={stubState.stub?.familyMemberSelfieBase64}
+            alt='Claim Scanned'
+          />
           <div className='qrcode-reader-sub-title'>
             {stubState.stub?.personName}
           </div>
@@ -57,20 +84,10 @@ export default function BarcodeReader({ title }: { title?: string }) {
               <div className='name'>{stubState.stub?.scannedBy}</div>
             </>
           )}
-          {stubState.stub?.isClaimed ? (
-            <div className='status bg-red qrcode-reader-sub-title'>
-              ALREADY SCANNED
-            </div>
-          ) : (
-            <div className='status bg-green qrcode-reader-sub-title'>
-              SCANNED
-            </div>
-          )}
-          <img
-            className='image'
-            src={stubState.stub?.familyMemberSelfieBase64}
-            alt='Claim Scanned'
-          />
+          <div className='qrcode-reader-sub-title mar-bot-1'>
+            {stubState.stub?.stubNumber}
+          </div>
+
           {stubState.stub && (
             <>
               <div className='text'>
@@ -83,19 +100,16 @@ export default function BarcodeReader({ title }: { title?: string }) {
                   {toMMMdd_at_hhmm_tt(stubState.stub?.scannedOn)}
                 </span>
               </div>
-            </>
-          )}
-          {stubState.stub?.isClaimed && (
-            <>
+
               <div className='text'>
                 Scanned by:&nbsp;
-                <span className='text-red'>
+                <span className='text-blue'>
                   {stubState.stub?.stubScannedBy}
                 </span>
               </div>
               <div className='text'>
                 Scanned on:&nbsp;
-                <span className='text-red'>
+                <span className='text-blue'>
                   {toMMMdd_at_hhmm_tt(stubState.stub?.stubScannedOn)}
                 </span>
               </div>
@@ -106,6 +120,12 @@ export default function BarcodeReader({ title }: { title?: string }) {
               onStubRead(result);
             }}
           />
+          {/* <QRCodeScanner
+            title={title}
+            onClose={(qr) => {
+              onStubRead(qr);
+            }}
+          /> */}
         </div>
         {/* <div className='main-body-container'>
           <div className='body-content'>

@@ -15,15 +15,45 @@ import { RootState } from '../../state/store';
 import CustomDropdown from '../components/custom-dropdown';
 import CustomTextArea from '../components/custom-textarea';
 import StubViewerModal from '../modals/stub-viewer-modal';
+import { saveAttendance } from '../../repositories/event-attendance-queries';
 export default function PersonScanConfirmation() {
   const stubViewerState = useSelector((state: RootState) => state.stubViewer);
   const scannerState = useSelector((state: RootState) => state.scanner);
   const userProfileState = useSelector((state: RootState) => state.userProfile);
   const dispatch = useDispatch();
   const setBusy = useSetBusy();
-  function confirm() {
-    if (scannerState.hasRepresentative) dispatch(scannerActions.setScreen(4));
-    else dispatch(scannerActions.setScreen(6));
+  async function confirm() {
+    if (scannerState.isAttendance && scannerState.person?.hasIn) {
+      setBusy(true);
+      await saveAttendance(
+        scannerState.person?.id ?? 0,
+        userProfileState.event?.id ?? 0,
+        scannerState.photo ?? '',
+        scannerState.approvedId,
+        scannerState.hasRepresentative
+          ? scannerState.representative?.id
+          : undefined,
+        scannerState.officeId,
+        scannerState.purpose,
+        scannerState.person?.hasIn ?? false,
+      )
+        .then((res) => {
+          if (res) {
+            dispatch(scannerActions.setScreen(7));
+          } else {
+            dispatch(scannerActions.setError('Unable to save attendance'));
+            dispatch(scannerActions.setScreen(8));
+          }
+        })
+        .catch((err) => {
+          dispatch(scannerActions.setError(err.message));
+          dispatch(scannerActions.setScreen(8));
+        })
+        .finally(() => setBusy(false));
+    } else {
+      if (scannerState.hasRepresentative) dispatch(scannerActions.setScreen(4));
+      else dispatch(scannerActions.setScreen(6));
+    }
   }
   function approve() {
     dispatch(scannerActions.setScreen(3));
@@ -148,7 +178,7 @@ export default function PersonScanConfirmation() {
                 {toDateMMM_dd_yyyy(
                   scannerState.isAttendance
                     ? scannerState.person.attendanceDate
-                    : scannerState.person.claimDate
+                    : scannerState.person.claimDate,
                 )}
               </div>
             </>

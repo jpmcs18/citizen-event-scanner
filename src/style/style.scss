@@ -157,6 +157,9 @@
 .bg-red {
   background-color: var(--red-color);
 }
+.bg-blue {
+  background-color: var(--blue-color);
+}
 .bg-green {
   background-color: var(--green-color);
 }
@@ -1097,16 +1100,17 @@ input {
     text-align: center;
   }
   .stub {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 1em;
     position: relative;
     z-index: 1;
-    width: 13em;
-    height: 5em;
     img {
-      position: absolute;
       z-index: 2;
       border-radius: 1em;
-      width: 13em;
+      aspect-ratio: 1;
+      width: 90%;
     }
   }
 }
@@ -1598,8 +1602,14 @@ fieldset {
 .text-red {
   color: var(--red-color) !important;
 }
+.text-blue {
+  color: var(--blue-color) !important;
+}
 .text-green {
   color: var(--green-color) !important;
+}
+.mar-bot-1 {
+  margin-bottom: 1em !important;
 }
 .btn-save,
 .color-green {
@@ -1666,6 +1676,11 @@ fieldset {
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        .icon {
+          width: 3em;
+          margin: 0.5em;
+          aspect-ratio: 1;
+        }
         .scanner-main-container {
           width: max(30dvw, 30dvh);
         }

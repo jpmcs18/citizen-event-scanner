@@ -1,10 +1,15 @@
-import React, { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../state/store';
-import { stubViewerActions } from '../../state/reducers/stub-viewer-reducer';
 import html2canvas from 'html2canvas';
-import { printImage, to12HoursTimeDisplay, toDateMMddyyyy } from '../../helper';
-import mainLogo from '../../icons/Main Logo.png';
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  printImage,
+  to12HoursTimeDisplay,
+  toDateMMddyyyy,
+  toMMMdd_at_hhmm_tt,
+} from '../../helper';
+import { stubViewerActions } from '../../state/reducers/stub-viewer-reducer';
+import { RootState } from '../../state/store';
+// import mainLogo from '../../icons/Main Logo BW.png';
 
 export default function StubViewerMainDisplay() {
   const stubViewerState = useSelector((state: RootState) => state.stubViewer);
@@ -40,7 +45,7 @@ export default function StubViewerMainDisplay() {
   );
 
   function printQR() {
-    var height = 850;
+    var height = 900;
     var width = 400;
     html2canvas(document.getElementById('stub-content') as HTMLElement, {
       width,
@@ -54,9 +59,9 @@ export default function StubViewerMainDisplay() {
   return (
     <div className='container'>
       <div className='stub-content' id='stub-content'>
-        <div className='main-logo'>
+        {/* <div className='main-logo'>
           <img src={mainLogo} alt='seal' />
-        </div>
+        </div> */}
         <div className='title'>{stubViewerState.stub?.eventName}</div>
         <div className='text'>
           SCANNED DATE: {toDateMMddyyyy(stubViewerState.stub?.scanClaimedOn)}
@@ -73,6 +78,17 @@ export default function StubViewerMainDisplay() {
         <div className='text'>
           SCANNED BY: {stubViewerState.stub?.scanClaimedByUser}
         </div>
+        {stubViewerState.stub?.reprintedBy && (
+          <>
+            <div className='text'>
+              REPRINTED BY: {stubViewerState.stub?.reprintedBy}
+            </div>
+            <div className='text'>
+              REPRINTED DATE & TIME:{' '}
+              {toMMMdd_at_hhmm_tt(stubViewerState.stub?.reprintedOn)}
+            </div>
+          </>
+        )}
       </div>
 
       {!stubViewerState.isAutoPrint && (

@@ -1,5 +1,6 @@
 export interface StubResponse {
   id: number | undefined;
+  stubNumber: string | undefined;
   isClaimed: boolean | undefined;
   personName: string | undefined;
   representedBy: string | undefined;

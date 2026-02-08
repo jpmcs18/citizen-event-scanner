@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useSetMessage } from '../custom-hooks/authorize-provider';
 import { SystemModules } from '../routes';
-import { signalRService } from '../services/signalr-service';
 import { userProfileActions } from '../state/reducers/user-profile-reducer';
 import { RootState } from '../state/store';
 import Dashboard from './dashboard';
@@ -19,9 +18,9 @@ export default function HomePage() {
       message: 'Continue to logout?',
       action: 'YESNO',
       onOk: async () => {
-        await signalRService.unregister(
-          userProfileState.systemUser?.id.toString() ?? ''
-        );
+        // await signalRService.unregister(
+        //   userProfileState.systemUser?.id.toString() ?? ''
+        // );
         dispatch(userProfileActions.clearProfile());
       },
     });
@@ -29,9 +28,9 @@ export default function HomePage() {
   async function gotoHome() {
     dispatch(userProfileActions.clearEvent());
 
-    await signalRService.unregister(
-      userProfileState.systemUser?.id.toString() ?? ''
-    );
+    // await signalRService.unregister(
+    //   userProfileState.systemUser?.id.toString() ?? ''
+    // );
     window.location.href = SystemModules.Dashboard;
   }
   return (

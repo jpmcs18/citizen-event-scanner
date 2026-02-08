@@ -160,6 +160,10 @@
   background-color: var(--red-color);
 }
 
+.bg-blue {
+  background-color: var(--blue-color);
+}
+
 .bg-green {
   background-color: var(--green-color);
 }
@@ -1122,17 +1126,18 @@ input:disabled {
   text-align: center;
 }
 .stub-content .stub {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 1em;
   position: relative;
   z-index: 1;
-  width: 13em;
-  height: 5em;
 }
 .stub-content .stub img {
-  position: absolute;
   z-index: 2;
   border-radius: 1em;
-  width: 13em;
+  aspect-ratio: 1;
+  width: 90%;
 }
 
 .pagination .pages-container {
@@ -1631,8 +1636,16 @@ fieldset legend {
   color: var(--red-color) !important;
 }
 
+.text-blue {
+  color: var(--blue-color) !important;
+}
+
 .text-green {
   color: var(--green-color) !important;
+}
+
+.mar-bot-1 {
+  margin-bottom: 1em !important;
 }
 
 .btn-save,
@@ -1707,6 +1720,11 @@ fieldset legend {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+.modal-container .barcode-reader-modal .barcode-reader-modal-body .scanner .icon {
+  width: 3em;
+  margin: 0.5em;
+  aspect-ratio: 1;
 }
 .modal-container .barcode-reader-modal .barcode-reader-modal-body .scanner .scanner-main-container {
   width: max(30dvw, 30dvh);

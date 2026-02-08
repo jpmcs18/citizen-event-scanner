@@ -27,11 +27,11 @@ export default function BarcodeScanner({
       focusOnScanner();
     },
     //eslint-disable-next-line
-    []
+    [hasFocus]
   );
 
   function focusOnScanner() {
-    const timeout = setTimeout(() => {
+    const timeout = setInterval(() => {
       if (txtRef.current) {
         txtRef.current.focus();
         setHasFocus((x) => true);
@@ -65,7 +65,7 @@ export default function BarcodeScanner({
           }}
         />
         {hasFocus ? (
-          <div className='scanning-status'>Barcode scanner is active</div>
+          <div className='scanning-status'>Active</div>
         ) : (
           <div className='scanning-status'>
             Clich here to activate barcode scanner

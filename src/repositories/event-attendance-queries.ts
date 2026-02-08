@@ -8,7 +8,8 @@ export async function saveAttendance(
   approverId: number | undefined,
   representedBy: number | undefined,
   officeId: number | undefined,
-  purpose: string | undefined
+  purpose: string | undefined,
+  hasIn: boolean,
 ): Promise<boolean | undefined> {
   return await httpPost(EventAttendanceEnd.Save, {
     personId,
@@ -18,5 +19,6 @@ export async function saveAttendance(
     representedBy,
     officeId,
     purpose,
+    hasIn,
   });
 }

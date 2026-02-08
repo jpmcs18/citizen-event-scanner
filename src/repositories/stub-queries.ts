@@ -3,9 +3,18 @@ import { StubResponse } from '../models/entities/StubResponse';
 import { httpPost, httpPut } from './base';
 
 export async function scanStubQRCode(
-  qrCode: string
-): Promise<StubResponse | undefined> {
-  return await httpPost(StubEnd.ScanQRCode, { qrCode });
+  qrCode: string,
+  eventId: number
+): Promise<
+  | {
+      stub: StubResponse;
+      alreadyScan: boolean;
+      remainingInventory: number;
+      totalScan: number;
+    }
+  | undefined
+> {
+  return await httpPost(StubEnd.ScanQRCode, { qrCode, eventId });
 }
 export async function claimStub(
   id: number,

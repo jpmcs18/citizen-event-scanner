@@ -12,4 +12,6 @@ export default interface Stub {
   scannedByUser: string | undefined;
   qrCodeBase64: string | undefined;
   barangay?: string | undefined;
+  reprintedBy?: string | undefined;
+  reprintedOn?: Date | undefined;
 }

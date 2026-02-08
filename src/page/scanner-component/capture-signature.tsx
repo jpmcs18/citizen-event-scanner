@@ -28,8 +28,8 @@ export default function CaptureSignature() {
   }
 
   async function confirm(sign: string | undefined) {
-    setBusy(true);
     if (scannerState.isClaim) {
+      setBusy(true);
       await saveClaim(
         scannerState.person?.id ?? 0,
         userProfileState.event?.id ?? 0,
@@ -38,7 +38,7 @@ export default function CaptureSignature() {
         scannerState.approvedId,
         scannerState.hasRepresentative
           ? scannerState.representative?.id
-          : undefined
+          : undefined,
       )
         .then((res) => {
           if (res) {

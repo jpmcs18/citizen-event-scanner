@@ -18,7 +18,7 @@ export const EventInventoryEnd = {
   GetRemainingInventory: 'event-inventory/inventory',
 };
 export const EventEnd = {
-  ScanQRCode: 'events/qr',
+  ScanQRCode: 'events/qr/scanner',
   ScanPersonQRCode: 'events/person/qr',
   PrintStub: 'events/print-stub',
   GetScannerLogCount: 'events/scanner-log-count',
