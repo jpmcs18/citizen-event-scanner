@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './App';
 import store from './state/store';
+import { loadConfig } from './config';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <Provider store={store}>
-    <App />
-  </Provider>
-);
+loadConfig().then(() => {
+  const root = ReactDOM.createRoot(
+    document.getElementById('root') as HTMLElement,
+  );
+  root.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+  );
+});

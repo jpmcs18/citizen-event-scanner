@@ -1,3 +1,6 @@
+// @ts-expect-error CSS is loaded by the bundler and has no TypeScript declarations.
+import './style/style.css';
+
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthorizeProvider } from './custom-hooks/authorize-provider';
@@ -5,7 +8,6 @@ import { refreshTokenAuthentication } from './repositories/base';
 import { getTheme, getToken } from './repositories/session-managers';
 import { dropdownActions } from './state/reducers/dropdown-reducer';
 import { RootState } from './state/store';
-import './style/style.css';
 import HomePage from './page/home-page';
 import { userProfileActions } from './state/reducers/user-profile-reducer';
 function App() {
@@ -41,7 +43,7 @@ function App() {
       });
     },
     //eslint-disable-next-line
-    []
+    [],
   );
   return (
     <AuthorizeProvider>
